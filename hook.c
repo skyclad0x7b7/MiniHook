@@ -88,7 +88,7 @@ FILE *fopen(const char *filename, const char *mode)
     return ret;
 }
 
-size_t fwrite(const char *buffer, size_t size, size_t count, FILE *stream)
+size_t fwrite(const void *buffer, size_t size, size_t count, FILE *stream)
 {
      Variable args[4] = { 
         { VT_string, (int)buffer },
