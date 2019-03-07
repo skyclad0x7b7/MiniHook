@@ -43,16 +43,15 @@ void HOOK_MAKE_LOG_STRING(char *buffer, const char *func_name, const unsigned in
     strcat(buffer, ")\n");
 }
 
-void HOOK_LOG(LoggingType loggingType, const char *func_name, const unsigned int arg_count, const Variable *args)
+void HOOK_LOG(const LoggingType loggingType, const char *func_name, const unsigned int arg_count, const Variable *args)
 {
     char buffer[1024] = {0, };
     HOOK_MAKE_LOG_STRING(buffer, func_name, arg_count, args);
-    char buffer2[1024] = {0, };
     switch(loggingType)
     {
         case LT_STDOUT:
         {
-            printf("%s", buffer2);
+            printf("%s", buffer);
             break;
         }
         case LT_FILE:
@@ -60,7 +59,7 @@ void HOOK_LOG(LoggingType loggingType, const char *func_name, const unsigned int
             FILE *hFile = lib_fopen("log.txt", "a");
             if(hFile != NULL)
             {
-                fwrite(buffer2, sizeof(char), strlen(buffer2), hFile);
+                fwrite(buffer, sizeof(char), strlen(buffer), hFile);
                 fclose(hFile);    
             }
             break;

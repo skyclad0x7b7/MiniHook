@@ -3,9 +3,9 @@
 
 int main(int argc, char *argv[])
 {
-    char *test = "Hello World";
-    char test2[24] = {0, };
-    strcpy(test2, test);
-    printf("%s\n", test2);
+    const char *testString = "Hello World!";
+    FILE *hFile = fopen("hiddenFile.txt", "wb");
+    fwrite(testString, sizeof(char), strlen(testString), hFile);
+    fclose(testString);
     return 0;
 }
