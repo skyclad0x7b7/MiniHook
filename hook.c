@@ -1,5 +1,16 @@
 #include "hook.h"
 
+/***** Initialize org function *****/
+typedef FILE *(*lib_fopen_type)(const char *, const char *);
+lib_fopen_type lib_fopen = NULL;
+
+static void con() __attribute__((constructor));
+void con()
+{
+    lib_fopen = (lib_fopen_type)dlsym(RTLD_NEXT, "fopen");
+}
+/************************************/
+
 void HOOK_MAKE_LOG_STRING(char *buffer, const char *func_name, const unsigned int arg_count, const Variable *args)
 {
     char temp[1024] = {0,};
@@ -32,49 +43,39 @@ void HOOK_MAKE_LOG_STRING(char *buffer, const char *func_name, const unsigned in
     strcat(buffer, ")\n");
 }
 
-void HOOK_LOG(bool write_on_file, const char *func_name, const unsigned int arg_count, const Variable *args)
+void HOOK_LOG(LoggingType loggingType, const char *func_name, const unsigned int arg_count, const Variable *args)
 {
     char buffer[1024] = {0, };
     HOOK_MAKE_LOG_STRING(buffer, func_name, arg_count, args);
     char buffer2[1024] = {0, };
-    lib_strcpy(buffer2, buffer);
-    if (write_on_file)
+    switch(loggingType)
     {
-        FILE *hFile = fopen("log.txt", "a");
+    case LT_STDOUT:
+    {
+        printf("%s", buffer2);
+        break;
+    }
+    case LT_FILE:
+    {
+        FILE *hFile = lib_fopen("log.txt", "a");
         if(hFile != NULL)
         {
             fwrite(buffer2, sizeof(char), strlen(buffer2), hFile);
             fclose(hFile);    
         }
+        break;
     }
-    else
-        printf("%s", buffer2);
 }
 
-/***** Initialize org function *****/
-typedef char *(*lib_strcpy_type)(char *, const char *);
-lib_strcpy_type lib_strcpy = NULL;
+ /* ========================================================== */
 
-static void con() __attribute__((constructor));
-void con()
+FILE *fopen(const char *filename, const char *mode) 
 {
-    lib_strcpy = (lib_strcpy_type)dlsym(RTLD_NEXT, "strcpy");
-}
-/************************************/
-
-
-char *strcpy(char *dest, const char *src) 
-{
-    // =======================================
     Variable args[2] = { 
-        { VT_buffer, (int)dest },
-        { VT_string, (int)src }
+        { VT_string, (int)filename },
+        { VT_string, (int)mode }
     };
-    HOOK_LOG(true, "strcpy", 2, args);
-    // Before Org Function
-
-    char *ret = lib_strcpy(dest, src);
-
-    // After Org Function
+    HOOK_LOG(LT_FILE, "fopen", 2, args);
+    char *ret = lib_fopen(filename, mode);
     return ret;
 }

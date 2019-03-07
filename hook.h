@@ -5,6 +5,12 @@
 #include <string.h>
 #include <dlfcn.h>
 
+typedef enum _LoggingType
+{
+    LT_STDOUT = 1,
+    LT_FILE = 2
+} LoggingType;
+
 typedef enum _VariableType 
 {
     VT_bool = 1,
@@ -20,5 +26,3 @@ typedef struct _Variable
     VariableType _type;
     int _var;
 } Variable;
-
-char *strcpy(char *dest, const char *src);
