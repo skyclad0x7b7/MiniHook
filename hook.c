@@ -50,20 +50,21 @@ void HOOK_LOG(LoggingType loggingType, const char *func_name, const unsigned int
     char buffer2[1024] = {0, };
     switch(loggingType)
     {
-    case LT_STDOUT:
-    {
-        printf("%s", buffer2);
-        break;
-    }
-    case LT_FILE:
-    {
-        FILE *hFile = lib_fopen("log.txt", "a");
-        if(hFile != NULL)
+        case LT_STDOUT:
         {
-            fwrite(buffer2, sizeof(char), strlen(buffer2), hFile);
-            fclose(hFile);    
+            printf("%s", buffer2);
+            break;
         }
-        break;
+        case LT_FILE:
+        {
+            FILE *hFile = lib_fopen("log.txt", "a");
+            if(hFile != NULL)
+            {
+                fwrite(buffer2, sizeof(char), strlen(buffer2), hFile);
+                fclose(hFile);    
+            }
+            break;
+        }
     }
 }
 
@@ -76,6 +77,6 @@ FILE *fopen(const char *filename, const char *mode)
         { VT_string, (int)mode }
     };
     HOOK_LOG(LT_FILE, "fopen", 2, args);
-    char *ret = lib_fopen(filename, mode);
+    FILE *ret = lib_fopen(filename, mode);
     return ret;
 }
