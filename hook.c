@@ -4,7 +4,7 @@
 typedef FILE *(*lib_fopen_type)(const char *, const char *);
 lib_fopen_type lib_fopen = NULL;
 
-typedef size_t(*lib_fwrite_type)(const void *base, size_t size, size_t count, FILE *fp);
+typedef size_t(*lib_fwrite_type)(const void *, size_t, size_t, FILE *);
 lib_fwrite_type lib_fwrite = NULL;
 
 static void con() __attribute__((constructor));
@@ -27,13 +27,14 @@ void HOOK_MAKE_LOG_STRING(char *buffer, const char *func_name, const unsigned in
         case VT_unsigned_int:
         {
             snprintf(temp, 1024, "%u", (unsigned)(args[i]._var));
+            break;
         }
         case VT_string:
         {
             snprintf(temp, 1024, "\"%s\"", (char *)(args[i]._var));
             break;
         }
-        case VT_buffer:
+        case VT_offset:
         {
             snprintf(temp, 1024, "0x%08x", (unsigned)(args[i]._var));
             break;
@@ -90,7 +91,7 @@ FILE *fopen(const char *filename, const char *mode)
 
 size_t fwrite(const void *buffer, size_t size, size_t count, FILE *stream)
 {
-     Variable args[4] = { 
+    Variable args[4] = { 
         { VT_string, (int)buffer },
         { VT_unsigned_int, (int)size },
         { VT_unsigned_int, (int)count },

@@ -14,11 +14,12 @@ typedef enum _LoggingType
 typedef enum _VariableType 
 {
     VT_bool = 1,
-    VT_char = 2,
-    VT_int = 3,
-    VT_unsigned_int = 4,
-    VT_string = 5,
-    VT_buffer = 6
+    VT_char,
+    VT_int,
+    VT_unsigned_int,
+    VT_string,
+    VT_buffer,
+    VT_offset
 } VariableType;
 
 typedef struct _Variable
