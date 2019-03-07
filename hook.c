@@ -95,7 +95,7 @@ size_t fwrite(const void *buffer, size_t size, size_t count, FILE *stream)
         { VT_string, (int)buffer },
         { VT_unsigned_int, (int)size },
         { VT_unsigned_int, (int)count },
-        { VT_buffer, (int)stream }
+        { VT_offset, (int)stream }
     };
     HOOK_LOG(LT_FILE, "fwrite", 4, args);
     size_t ret = lib_fwrite(buffer, size, count, stream);
