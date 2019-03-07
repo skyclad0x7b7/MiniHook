@@ -7,15 +7,35 @@ lib_fopen_type lib_fopen = NULL;
 typedef size_t(*lib_fwrite_type)(const void *, size_t, size_t, FILE *);
 lib_fwrite_type lib_fwrite = NULL;
 
+typedef size_t(*lib_fread_type)(const void *, size_t, size_t, FILE *);
+lib_fread_type lib_fread = NULL;
+
 typedef int(*lib_fclose_type)(FILE *);
 lib_fclose_type lib_fclose = NULL;
+
+typedef int(*lib_unlink_type)(const char *);
+lib_unlink_type lib_unlink = NULL;
+
+typedef int(*lib_remove_type)(const char *);
+lib_remove_type lib_remove = NULL;
+
+typedef int(*lib_rename_type)(const char *, const char *);
+lib_rename_type lib_rename = NULL;
+
+typedef mode_t(*lib_umask_type)(mode_t);
+lib_umask_type lib_umask = NULL;
 
 static void con() __attribute__((constructor));
 void con()
 {
     lib_fopen = (lib_fopen_type)dlsym(RTLD_NEXT, "fopen");
     lib_fwrite = (lib_fwrite_type)dlsym(RTLD_NEXT, "fwrite");
+    lib_fread = (lib_fread_type)dlsym(RTLD_NEXT, "fread");
     lib_fclose = (lib_fclose_type)dlsym(RTLD_NEXT, "fclose");
+    lib_unlink = (lib_unlink_type)dlsym(RTLD_NEXT, "unlink");
+    lib_remove = (lib_remove_type)dlsym(RTLD_NEXT, "remove");
+    lib_rename = (lib_rename_type)dlsym(RTLD_NEXT, "rename");
+    lib_umask = (lib_umask_type)dlsym(RTLD_NEXT, "umask");
 }
 /************************************/
 
@@ -82,7 +102,7 @@ void HOOK_LOG(const LoggingType loggingType, const char *func_name, const unsign
 
  /* ========================================================== */
 
-FILE *fopen(const char *filename, const char *mode) 
+FILE *fopen(const char *filename, const char *mode)
 {
     Variable args[2] = { 
         { VT_string, (int)filename },
@@ -106,6 +126,19 @@ size_t fwrite(const void *buffer, size_t size, size_t count, FILE *stream)
     return ret;
 }
 
+size_t fread(const void *buffer, size_t size, size_t count, FILE *stream)
+{
+    Variable args[4] = { 
+        { VT_string, (int)buffer },
+        { VT_unsigned_int, (int)size },
+        { VT_unsigned_int, (int)count },
+        { VT_offset, (int)stream }
+    };
+    HOOK_LOG(LT_FILE, "fread", 4, args);
+    size_t ret = lib_fread(buffer, size, count, stream);
+    return ret;
+}
+
 int fclose(FILE *stream)
 {
     Variable args[1] = { 
@@ -115,3 +148,45 @@ int fclose(FILE *stream)
     int ret = lib_fclose(stream);
     return ret; 
 }
+
+int unlink(const char *filename)
+{
+    Variable args[1] = { 
+        { VT_string, (int)filename }
+    };
+    HOOK_LOG(LT_FILE, "unlink", 1, args);
+    int ret = lib_unlink(filename);
+    return ret;
+}
+
+int remove(const char *filename)
+{
+    Variable args[1] = { 
+        { VT_string, (int)filename }
+    };
+    HOOK_LOG(LT_FILE, "remove", 1, args);
+    int ret = lib_remove(filename);
+    return ret;
+}
+
+int rename(const char *oldname, const char *newname)
+{
+    Variable args[2] = { 
+        { VT_string, (int)oldname },
+        { VT_string, (int)newname }
+    };
+    HOOK_LOG(LT_FILE, "remove", 2, args);
+    int ret = lib_rename(oldname, newname);
+    return ret;
+}
+
+mode_t uname(mode_t mode)
+{
+    Variable args[1] = { 
+        { VT_unsigned_int, (int)mode }
+    };
+    HOOK_LOG(LT_FILE, "uname", 1, args);
+    mode_t ret = lib_uname(oldname, newname);
+    return ret;
+}
+

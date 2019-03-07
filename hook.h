@@ -5,6 +5,11 @@
 #include <string.h>
 #include <dlfcn.h>
 
+#include <sys/types.h>
+#include <sys/stat.h>
+
+#include <unistd.h>
+
 typedef enum _LoggingType
 {
     LT_STDOUT = 1,
