@@ -7,11 +7,15 @@ lib_fopen_type lib_fopen = NULL;
 typedef size_t(*lib_fwrite_type)(const void *, size_t, size_t, FILE *);
 lib_fwrite_type lib_fwrite = NULL;
 
+typedef int(*lib_fclose_type)(FILE *);
+lib_fclose_type lib_fclose = NULL;
+
 static void con() __attribute__((constructor));
 void con()
 {
     lib_fopen = (lib_fopen_type)dlsym(RTLD_NEXT, "fopen");
     lib_fwrite = (lib_fwrite_type)dlsym(RTLD_NEXT, "fwrite");
+    lib_fclose = (lib_fclose_type)dlsym(RTLD_NEXT, "fclose");
 }
 /************************************/
 
@@ -69,7 +73,7 @@ void HOOK_LOG(const LoggingType loggingType, const char *func_name, const unsign
             if(hFile != NULL)
             {
                 lib_fwrite(buffer, sizeof(char), strlen(buffer), hFile);
-                fclose(hFile);    
+                lib_fclose(hFile);    
             }
             break;
         }
@@ -100,4 +104,14 @@ size_t fwrite(const void *buffer, size_t size, size_t count, FILE *stream)
     HOOK_LOG(LT_FILE, "fwrite", 4, args);
     size_t ret = lib_fwrite(buffer, size, count, stream);
     return ret;
+}
+
+int fclose(FILE *stream)
+{
+    Variable args[1] = { 
+        { VT_offset, (int)stream }
+    };
+    HOOK_LOG(LT_FILE, "fclose", 1, args);
+    int ret = lib_fclose(stream);
+    return ret; 
 }
