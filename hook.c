@@ -25,6 +25,10 @@ lib_rename_type lib_rename = NULL;
 typedef mode_t(*lib_umask_type)(mode_t);
 lib_umask_type lib_umask = NULL;
 
+typedef pid_t(*lib_getpid_type)();
+lib_getpid_type lib_getpid = NULL;
+
+
 static void con() __attribute__((constructor));
 void con()
 {
@@ -36,6 +40,7 @@ void con()
     lib_remove = (lib_remove_type)dlsym(RTLD_NEXT, "remove");
     lib_rename = (lib_rename_type)dlsym(RTLD_NEXT, "rename");
     lib_umask = (lib_umask_type)dlsym(RTLD_NEXT, "umask");
+    lib_getpid = (lib_getpid_type)dlsym(RTLD_NEXT, "getpid");
 }
 /************************************/
 
@@ -44,7 +49,7 @@ void HOOK_MAKE_LOG_STRING(char *buffer, const char *func_name, const unsigned in
     char temp[1024] = {0,};
     snprintf(buffer, 1024, "%s(", func_name);
 
-    for (int i = 0; i < arg_count; i++)
+    for (int i = 0; i < arg_count && args != NULL; i++)
     {
         switch(args[i]._type)
         {
@@ -89,7 +94,9 @@ void HOOK_LOG(const LoggingType loggingType, const char *func_name, const unsign
         }
         case LT_FILE:
         {
-            FILE *hFile = lib_fopen("log.txt", "a");
+            char filename[256] = {0, };
+            snprintf(filename, sizeof(filename), "pid_%d.log", lib_getpid());
+            FILE *hFile = lib_fopen(filename, "a");
             if(hFile != NULL)
             {
                 lib_fwrite(buffer, sizeof(char), strlen(buffer), hFile);
@@ -187,6 +194,13 @@ mode_t umask(mode_t mode)
     };
     HOOK_LOG(LT_FILE, "umask", 1, args);
     mode_t ret = lib_umask(mode);
+    return ret;
+}
+
+pid_t getpid()
+{
+    HOOK_LOG(LT_FILE, "getpid", 0, NULL);
+    pid_t ret = lib_getpid();
     return ret;
 }
 
