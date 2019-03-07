@@ -180,13 +180,13 @@ int rename(const char *oldname, const char *newname)
     return ret;
 }
 
-mode_t uname(mode_t mode)
+mode_t umask(mode_t mode)
 {
     Variable args[1] = { 
         { VT_unsigned_int, (int)mode }
     };
-    HOOK_LOG(LT_FILE, "uname", 1, args);
-    mode_t ret = lib_uname(mode);
+    HOOK_LOG(LT_FILE, "umask", 1, args);
+    mode_t ret = lib_umask(mode);
     return ret;
 }
 
