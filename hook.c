@@ -7,7 +7,7 @@ lib_fopen_type lib_fopen = NULL;
 typedef size_t(*lib_fwrite_type)(const void *, size_t, size_t, FILE *);
 lib_fwrite_type lib_fwrite = NULL;
 
-typedef size_t(*lib_fread_type)(const void *restrict, size_t, size_t, FILE *restrict);
+typedef size_t(*lib_fread_type)(void *restrict, size_t, size_t, FILE *restrict);
 lib_fread_type lib_fread = NULL;
 
 typedef int(*lib_fclose_type)(FILE *);
@@ -126,7 +126,7 @@ size_t fwrite(const void *buffer, size_t size, size_t count, FILE *stream)
     return ret;
 }
 
-size_t fread(const void *restrict buffer, size_t size, size_t count, FILE *restrict stream)
+size_t fread(void *restrict buffer, size_t size, size_t count, FILE *restrict stream)
 {
     Variable args[4] = { 
         { VT_string, (int)buffer },
