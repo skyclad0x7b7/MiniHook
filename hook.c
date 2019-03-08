@@ -52,7 +52,7 @@ void con()
     lib_umask = (lib_umask_type)dlsym(RTLD_NEXT, "umask");
     lib_getpid = (lib_getpid_type)dlsym(RTLD_NEXT, "getpid");
     lib_fork = (lib_fork_type)dlsym(RTLD_NEXT, "fork");
-    lib_system(lib_system_type)dlsym(RTLD_NEXT, "system");
+    lib_system = (lib_system_type)dlsym(RTLD_NEXT, "system");
 }
 /************************************/
 
