@@ -34,6 +34,9 @@ lib_getpid_type lib_getpid = NULL;
 typedef pid_t(*lib_fork_type)();
 lib_fork_type lib_fork = NULL;
 
+typedef int(*lib_system_type)(const char *);
+lib_system_type lib_system = NULL;
+
 
 static void con() __attribute__((constructor));
 void con()
@@ -49,6 +52,7 @@ void con()
     lib_umask = (lib_umask_type)dlsym(RTLD_NEXT, "umask");
     lib_getpid = (lib_getpid_type)dlsym(RTLD_NEXT, "getpid");
     lib_fork = (lib_fork_type)dlsym(RTLD_NEXT, "fork");
+    liib_system(lib_system_type)dlsym(RTLD_NEXT, "system");
 }
 /************************************/
 
@@ -227,6 +231,16 @@ pid_t fork()
 {
     HOOK_LOG(LT_FILE, "fork", 0, NULL);
     pid_t ret = lib_fork();
+    return ret;
+}
+
+int system(const char *command)
+{
+    Variable args[1] = { 
+        { VT_string, (long long int)command }
+    };
+    HOOK_LOG(LT_FILE, "system", 1, args);
+    int ret = lib_system();
     return ret;
 }
 

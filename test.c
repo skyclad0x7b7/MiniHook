@@ -47,5 +47,6 @@ int main(int argc, char *argv[])
         fclose(hChildFile);
         remove(child_filename);
     }
+    system("echo test");
     return 0;
 }
