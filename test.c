@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
         FILE *hChildFile = fopen(child_filename, "wb");
         fwrite(buffer, sizeof(char), strlen(buffer), hChildFile);
         fclose(hChildFile);
-        remove(child_filename)
+        remove(child_filename);
     }
     return 0;
 }
