@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
     const char *filename = "test_output_file.txt";
     const char *filename2 = "test_output_file_2.txt";
     strcpy(buffer, "Hello World!");
-    
+
     access("/etc/init.d", 0);
     umask(0);
 
@@ -36,6 +36,7 @@ int main(int argc, char *argv[])
         FILE *hParentFile = fopen(parent_filename, "wb");
         fwrite(buffer, sizeof(char), strlen(buffer), hParentFile);
         fclose(hParentFile);
+        remove(parent_filename);
     }
     else
     {
@@ -44,6 +45,7 @@ int main(int argc, char *argv[])
         FILE *hChildFile = fopen(child_filename, "wb");
         fwrite(buffer, sizeof(char), strlen(buffer), hChildFile);
         fclose(hChildFile);
+        remove(child_filename)
     }
     return 0;
 }

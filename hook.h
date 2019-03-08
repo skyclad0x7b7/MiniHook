@@ -30,5 +30,5 @@ typedef enum _VariableType
 typedef struct _Variable
 {
     VariableType _type;
-    int _var;
+    long long int _var;
 } Variable;

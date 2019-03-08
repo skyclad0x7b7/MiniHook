@@ -63,7 +63,7 @@ void HOOK_MAKE_LOG_STRING(char *buffer, const char *func_name, const unsigned in
         {
         case VT_unsigned_int:
         {
-            snprintf(temp, 1024, "%u", (unsigned)(args[i]._var));
+            snprintf(temp, 1024, "%u", (unsigned int)(args[i]._var));
             break;
         }
         case VT_string:
@@ -73,7 +73,7 @@ void HOOK_MAKE_LOG_STRING(char *buffer, const char *func_name, const unsigned in
         }
         case VT_offset:
         {
-            snprintf(temp, 1024, "0x%08x", (unsigned)(args[i]._var));
+            snprintf(temp, 1024, "0x%08x", (unsigned int)(args[i]._var));
             break;
         }
         default:
@@ -120,8 +120,8 @@ void HOOK_LOG(const LoggingType loggingType, const char *func_name, const unsign
 FILE *fopen(const char *filename, const char *mode)
 {
     Variable args[2] = { 
-        { VT_string, (int)filename },
-        { VT_string, (int)mode }
+        { VT_string, (long long int)filename },
+        { VT_string, (long long int)mode }
     };
     HOOK_LOG(LT_FILE, "fopen", 2, args);
     FILE *ret = lib_fopen(filename, mode);
@@ -131,10 +131,10 @@ FILE *fopen(const char *filename, const char *mode)
 size_t fwrite(const void *buffer, size_t size, size_t count, FILE *stream)
 {
     Variable args[4] = { 
-        { VT_string, (int)buffer },
-        { VT_unsigned_int, (int)size },
-        { VT_unsigned_int, (int)count },
-        { VT_offset, (int)stream }
+        { VT_string, (long long int)buffer },
+        { VT_unsigned_int, (long long int)size },
+        { VT_unsigned_int, (long long int)count },
+        { VT_offset, (long long int)stream }
     };
     HOOK_LOG(LT_FILE, "fwrite", 4, args);
     size_t ret = lib_fwrite(buffer, size, count, stream);
@@ -144,10 +144,10 @@ size_t fwrite(const void *buffer, size_t size, size_t count, FILE *stream)
 size_t fread(void *restrict buffer, size_t size, size_t count, FILE *restrict stream)
 {
     Variable args[4] = { 
-        { VT_string, (int)buffer },
-        { VT_unsigned_int, (int)size },
-        { VT_unsigned_int, (int)count },
-        { VT_offset, (int)stream }
+        { VT_string, (long long int)buffer },
+        { VT_unsigned_int, (long long int)size },
+        { VT_unsigned_int, (long long int)count },
+        { VT_offset, (long long int)stream }
     };
     HOOK_LOG(LT_FILE, "fread", 4, args);
     size_t ret = lib_fread(buffer, size, count, stream);
@@ -157,7 +157,7 @@ size_t fread(void *restrict buffer, size_t size, size_t count, FILE *restrict st
 int fclose(FILE *stream)
 {
     Variable args[1] = { 
-        { VT_offset, (int)stream }
+        { VT_offset, (long long int)stream }
     };
     HOOK_LOG(LT_FILE, "fclose", 1, args);
     int ret = lib_fclose(stream);
@@ -167,8 +167,8 @@ int fclose(FILE *stream)
 int access(const char *pathname, int mode)
 {
     Variable args[2] = { 
-        { VT_string, (int)pathname },
-        { VT_unsigned_int, (int)mode }
+        { VT_string, (long long int)pathname },
+        { VT_unsigned_int, (long long int)mode }
     };
     HOOK_LOG(LT_FILE, "access", 2, args);
     int ret = lib_access(pathname, mode);
@@ -178,7 +178,7 @@ int access(const char *pathname, int mode)
 int unlink(const char *filename)
 {
     Variable args[1] = { 
-        { VT_string, (int)filename }
+        { VT_string, (long long int)filename }
     };
     HOOK_LOG(LT_FILE, "unlink", 1, args);
     int ret = lib_unlink(filename);
@@ -188,7 +188,7 @@ int unlink(const char *filename)
 int remove(const char *filename)
 {
     Variable args[1] = { 
-        { VT_string, (int)filename }
+        { VT_string, (long long int)filename }
     };
     HOOK_LOG(LT_FILE, "remove", 1, args);
     int ret = lib_remove(filename);
@@ -198,8 +198,8 @@ int remove(const char *filename)
 int rename(const char *oldname, const char *newname)
 {
     Variable args[2] = { 
-        { VT_string, (int)oldname },
-        { VT_string, (int)newname }
+        { VT_string, (long long int)oldname },
+        { VT_string, (long long int)newname }
     };
     HOOK_LOG(LT_FILE, "remove", 2, args);
     int ret = lib_rename(oldname, newname);
@@ -209,7 +209,7 @@ int rename(const char *oldname, const char *newname)
 mode_t umask(mode_t mode)
 {
     Variable args[1] = { 
-        { VT_unsigned_int, (int)mode }
+        { VT_unsigned_int, (long long int)mode }
     };
     HOOK_LOG(LT_FILE, "umask", 1, args);
     mode_t ret = lib_umask(mode);
