@@ -3,6 +3,8 @@
 lib_fopen_type lib_fopen = NULL;
 lib_getpid_type lib_getpid = NULL;
 
+using namespace Mini;
+
 static void con() __attribute__((constructor));
 void con()
 {
@@ -15,10 +17,10 @@ void con()
 FILE *fopen(const char *filename, const char *mode)
 {
     Variable args[2] = { 
-        Variable(VariableType::VT_string, (PTR_TYPE)filename),
-        Variable(VariableType::VT_string, (PTR_TYPE)mode)
+        Variable(VariableType::VT_char_array, (PTR_TYPE)filename),
+        Variable(VariableType::VT_char_array, (PTR_TYPE)mode)
     };
-    Logger.instance().log(MakeLogString("fopen", 2, args));
+    Logger::instance().log(MakeLogString("fopen", 2, args));
 
     FILE *ret = lib_fopen(filename, mode);
     return ret;
@@ -26,7 +28,7 @@ FILE *fopen(const char *filename, const char *mode)
 
 pid_t getpid()
 {
-    Logger.instance().log(MakeLogString("getpid", 0, NULL));
+    Logger::instance().log(MakeLogString("getpid", 0, NULL));
     pid_t ret = lib_getpid();
     return ret;
 }

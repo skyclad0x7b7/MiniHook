@@ -1,6 +1,8 @@
 #ifndef __VARIABLE_H__
 #define __VARIABLE_H__
 
+#include <string>
+
 #include "libc_func.h"
 
 #ifdef _X64

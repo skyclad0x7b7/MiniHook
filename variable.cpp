@@ -58,7 +58,7 @@ std::string Variable::ToString() const
         }
     case VariableType::VT_char_array:
         {
-            snprintf(buf, sizeof(buf), "\"%s\"", static_cast<char *>(_data));
+            snprintf(buf, sizeof(buf), "\"%s\"", reinterpret_cast<char *>(_data));
             ret.assign(buf);
             break;
         }
