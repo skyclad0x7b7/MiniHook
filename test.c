@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
 
     remove(filename2);
 
-    pid_t childPid = fork()
+    pid_t childPid = fork();
     if(childPid)
     {
         // Parent Process
