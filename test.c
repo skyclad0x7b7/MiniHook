@@ -7,12 +7,12 @@
 
 int main(int argc, char *argv[])
 {
-	char buffer[1024] = { 0, };
-	const char *filename = "hiddenFile.txt";
-	const char *filename2 = "hiddenFile2.txt";
-	strcpy(buffer, "Hello World!");\
+    char buffer[1024] = { 0, };
+    const char *filename = "test_output_file.txt";
+    const char *filename2 = "test_output_file_2.txt";
+    strcpy(buffer, "Hello World!");\
     
-	umask(0);
+    umask(0);
 
     FILE *hFile = fopen(filename, "wb");
     fwrite(buffer, sizeof(char), strlen(buffer), hFile);
@@ -26,5 +26,23 @@ int main(int argc, char *argv[])
     fclose(hFile);
 
     remove(filename2);
+
+    pid_t childPid = fork()
+    if(childPid)
+    {
+        // Parent Process
+        const char *parent_filename = "ParentFile.txt";
+        FILE *hParentFile = fopen(parent_filename, "wb");
+        fwrite(buffer, sizeof(char), strlen(buffer), hParentFile);
+        fclose(hParentFile);
+    }
+    else
+    {
+        // Child Process
+        const char *child_filename = "ChildFile.txt";
+        FILE *hChildFile = fopen(child_filename, "wb");
+        fwrite(buffer, sizeof(char), strlen(buffer), hChildFile);
+        fclose(hChildFile);
+    }
     return 0;
 }

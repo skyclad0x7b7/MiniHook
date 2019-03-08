@@ -28,6 +28,9 @@ lib_umask_type lib_umask = NULL;
 typedef pid_t(*lib_getpid_type)();
 lib_getpid_type lib_getpid = NULL;
 
+typedef pid_t(*lib_fork_type)();
+lib_fork_type lib_fork = NULL;
+
 
 static void con() __attribute__((constructor));
 void con()
@@ -41,6 +44,7 @@ void con()
     lib_rename = (lib_rename_type)dlsym(RTLD_NEXT, "rename");
     lib_umask = (lib_umask_type)dlsym(RTLD_NEXT, "umask");
     lib_getpid = (lib_getpid_type)dlsym(RTLD_NEXT, "getpid");
+    lib_fork = (lib_fork_type)dlsym(RTLD_NEXT, "fork");
 }
 /************************************/
 
@@ -201,6 +205,13 @@ pid_t getpid()
 {
     HOOK_LOG(LT_FILE, "getpid", 0, NULL);
     pid_t ret = lib_getpid();
+    return ret;
+}
+
+pid_t fork()
+{
+    HOOK_LOG(LT_FILE, "fork", 0, NULL);
+    pid_t ret = lib_fork();
     return ret;
 }
 
