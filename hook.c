@@ -13,6 +13,9 @@ lib_fread_type lib_fread = NULL;
 typedef int(*lib_fclose_type)(FILE *);
 lib_fclose_type lib_fclose = NULL;
 
+typedef int(*lib_access_type)(const char *, int);
+lib_access_type lib_access = NULL;
+
 typedef int(*lib_unlink_type)(const char *);
 lib_unlink_type lib_unlink = NULL;
 
@@ -39,6 +42,7 @@ void con()
     lib_fwrite = (lib_fwrite_type)dlsym(RTLD_NEXT, "fwrite");
     lib_fread = (lib_fread_type)dlsym(RTLD_NEXT, "fread");
     lib_fclose = (lib_fclose_type)dlsym(RTLD_NEXT, "fclose");
+    lib_access = (lib_access_type)dlsym(RTLD_NEXT, "access");
     lib_unlink = (lib_unlink_type)dlsym(RTLD_NEXT, "unlink");
     lib_remove = (lib_remove_type)dlsym(RTLD_NEXT, "remove");
     lib_rename = (lib_rename_type)dlsym(RTLD_NEXT, "rename");
@@ -157,6 +161,17 @@ int fclose(FILE *stream)
     };
     HOOK_LOG(LT_FILE, "fclose", 1, args);
     int ret = lib_fclose(stream);
+    return ret; 
+}
+
+int access(const char *pathname, int mode)
+{
+    Variable args[2] = { 
+        { VT_string, (int)pathname },
+        { VT_unsigned_int, (int)mode }
+    };
+    HOOK_LOG(LT_FILE, "access", 2, args);
+    int ret = lib_access(pathname, mode);
     return ret; 
 }
 

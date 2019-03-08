@@ -10,8 +10,9 @@ int main(int argc, char *argv[])
     char buffer[1024] = { 0, };
     const char *filename = "test_output_file.txt";
     const char *filename2 = "test_output_file_2.txt";
-    strcpy(buffer, "Hello World!");\
+    strcpy(buffer, "Hello World!");
     
+    access("/etc/init.d", 0);
     umask(0);
 
     FILE *hFile = fopen(filename, "wb");
