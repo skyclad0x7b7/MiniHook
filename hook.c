@@ -37,6 +37,20 @@ lib_fork_type lib_fork = NULL;
 typedef int(*lib_system_type)(const char *);
 lib_system_type lib_system = NULL;
 
+typedef int(*lib_socket_type)(int, int, int);
+lib_socket_type lib_socket = NULL;
+
+typedef int(*lib_connect_type)(int, const struct sockaddr *, socklen_t);
+lib_connect_type lib_connect = NULL;
+
+typedef int(*lib_send_type)(int, const void *, size_t, int);
+lib_send_type lib_send = NULL;
+
+typedef int(*lib_recv_type)(int, void *, size_t, int);
+lib_recv_type lib_recv = NULL;
+
+
+
 
 static void con() __attribute__((constructor));
 void con()
@@ -53,6 +67,10 @@ void con()
     lib_getpid = (lib_getpid_type)dlsym(RTLD_NEXT, "getpid");
     lib_fork = (lib_fork_type)dlsym(RTLD_NEXT, "fork");
     lib_system = (lib_system_type)dlsym(RTLD_NEXT, "system");
+    lib_socket = (lib_socket_type)dlsym(RTLD_NEXT, "socket");
+    lib_connect = (lib_connect_type)dlsym(RTLD_NEXT, "connect");
+    lib_send = (lib_send_type)dlsym(RTLD_NEXT, "send");
+    lib_recv = (lib_recv_type)dlsym(RTLD_NEXT, "recv");
 }
 /************************************/
 
@@ -65,6 +83,11 @@ void HOOK_MAKE_LOG_STRING(char *buffer, const char *func_name, const unsigned in
     {
         switch(args[i]._type)
         {
+        case VT_int:
+        {
+            snprintf(temp, 1024, "%d", (int)(args[i]._var));
+            break;
+        }
         case VT_unsigned_int:
         {
             snprintf(temp, 1024, "%u", (unsigned int)(args[i]._var));
@@ -244,3 +267,52 @@ int system(const char *command)
     return ret;
 }
 
+int socket(int domain, int type, int protocol)
+{
+    Variable args[3] = { 
+        { VT_int, (long long int)domain },
+        { VT_int, (long long int)type },
+        { VT_int, (long long int)protocol }
+    };
+    HOOK_LOG(LT_FILE, "socket", 3, args);
+    int ret = lib_socket(domain, type, protocol);
+    return ret;
+}
+
+int connect(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
+{
+    Variable args[3] = { 
+        { VT_int, (long long int)sockfd },
+        { VT_offset, (long long int)addr },
+        { VT_unsigned_int, (long long int)addrlen }
+    };
+    HOOK_LOG(LT_FILE, "connect", 3, args);
+    int ret = lib_connect(sockfd, addr, addrlen);
+    return ret;
+}
+
+int send(int s, const void *msg, size_t len, int flags)
+{
+    Variable args[4] = { 
+        { VT_int, (long long int)s },
+        { VT_offset, (long long int)msg },
+        { VT_unsigned_int, (long long int)len },
+        { VT_int, (long long int)flags }
+    };
+    HOOK_LOG(LT_FILE, "send", 4, args);
+    int ret = lib_send(s, msg, len, flags);
+    return ret;
+}
+
+int recv(int s, void *buf, size_t len, int flags)
+{
+    Variable args[4] = { 
+        { VT_int, (long long int)s },
+        { VT_offset, (long long int)buf },
+        { VT_unsigned_int, (long long int)len },
+        { VT_int, (long long int)flags }
+    };
+    HOOK_LOG(LT_FILE, "recv", 4, args);
+    int ret = lib_recv(s, buf, len, flags);
+    return ret;
+}
