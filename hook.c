@@ -49,8 +49,21 @@ lib_send_type lib_send = NULL;
 typedef int(*lib_recv_type)(int, void *, size_t, int);
 lib_recv_type lib_recv = NULL;
 
+typedef int(*lib_bind_type)(int, const struct sockaddr *, socklen_t);
+lib_bind_type lib_bind = NULL;
 
+typedef int(*lib_listen_type)(int, int);
+lib_listen_type lib_listen = NULL;
 
+typedef int(*lib_pthread_create_type)(pthread_t *restrict, const pthread_attr_t *restrict, void *(*start_routine)(void *), void *);
+lib_pthread_create_type lib_pthread_create = NULL;
+
+typedef int(*lib_kill_type)(int, int);
+lib_kill_type lib_kill = NULL;
+
+typedef void (*sighandler_t)(int);
+typedef sighandler_t(*lib_signal_type)(int, sighandler_t);
+lib_signal_type lib_signal = NULL;
 
 static void con() __attribute__((constructor));
 void con()
@@ -71,6 +84,11 @@ void con()
     lib_connect = (lib_connect_type)dlsym(RTLD_NEXT, "connect");
     lib_send = (lib_send_type)dlsym(RTLD_NEXT, "send");
     lib_recv = (lib_recv_type)dlsym(RTLD_NEXT, "recv");
+    lib_bind = (lib_bind_type)dlsym(RTLD_NEXT, "bind");
+    lib_listen = (lib_listen_type)dlsym(RTLD_NEXT, "listen");
+    lib_pthread_create = (lib_pthread_create_type)dlsym(RTLD_NEXT, "pthread_create");
+    lib_kill = (lib_kill_type)dlsym(RTLD_NEXT, "kill");
+    lib_signal = (lib_signal_type)dlsym(RTLD_NEXT, "signal")
 }
 /************************************/
 
@@ -314,5 +332,52 @@ int recv(int s, void *buf, size_t len, int flags)
     };
     HOOK_LOG(LT_FILE, "recv", 4, args);
     int ret = lib_recv(s, buf, len, flags);
+    return ret;
+}
+
+int bind(int socket, const struct sockaddr *address, socklen_t addresse_len)
+{
+    Variable args[3] = { 
+        { VT_int, (long long int)s },
+        { VT_offset, (long long int)buf },
+        { VT_unsigned_int, (long long int)len }
+    };
+    HOOK_LOG(LT_FILE, "bind", 3, args);
+    int ret = lib_bind(socket, address, address_len);
+    return ret;
+}
+
+int listen(int socket, int backlog)
+{
+    Variable args[2] = { 
+        { VT_int, (long long int)socket },
+        { VT_int, (long long int)backlog }
+    };
+    HOOK_LOG(LT_FILE, "listen", 2, args);
+    int ret = lib_bind(socket, backlog);
+    return ret;
+}
+
+int pthread_create(pthread_t *restrict thread, const pthread_attr_t *restrict attr, void *(*start_routine)(void *), void *restrictarg)
+{
+    Variable args[4] = { 
+        { VT_offset, (long long int)thread },
+        { VT_offset, (long long int)attr },
+        { VT_offset, (long long int)start_routine },
+        { VT_offset, (long long int)restrictarg }
+    };
+    HOOK_LOG(LT_FILE, "pthread_create", 4, args);
+    int ret = lib_pthread_create(thread, attr, start_routine, restrictarg);
+    return ret;
+}
+
+sighandler_t signal(int signum, sighandler_t handler)
+{
+    Variable args[2] = { 
+        { VT_unsigned_int, (long long int)signum },
+        { VT_offset, (long long int)handler }
+    };
+    HOOK_LOG(LT_FILE, "signal", 2, args);
+    int ret = lib_signal(signum, handler);
     return ret;
 }

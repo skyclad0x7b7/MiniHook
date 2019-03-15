@@ -11,4 +11,4 @@ test_x86 : test.c
 	gcc -o test_x86 test.c -m32
 
 clean :
-	rm *.so *.log *.txt test
+	rm *.so *.log *.txt test_x64 test_x86
