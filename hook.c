@@ -49,6 +49,12 @@ lib_system_type lib_system = NULL;
 typedef int(*lib_socket_type)(int, int, int);
 lib_socket_type lib_socket = NULL;
 
+typedef uint16_t(*lib_htons_type)(uint16_t);
+lib_htons_type lib_htons = NULL;
+
+typedef int(*lib_getaddrinfo_type)(const char *, const char *, const struct addrinfo *, struct addrinfo **);
+lib_getaddrinfo_type lib_getaddrinfo = NULL;
+
 typedef int(*lib_connect_type)(int, const struct sockaddr *, socklen_t);
 lib_connect_type lib_connect = NULL;
 
@@ -100,6 +106,8 @@ void con()
     lib_system = (lib_system_type)dlsym(RTLD_NEXT, "system");
     lib_socket = (lib_socket_type)dlsym(RTLD_NEXT, "socket");
     lib_connect = (lib_connect_type)dlsym(RTLD_NEXT, "connect");
+    lib_htons = (lib_htons_type)dlsym(RTLD_NEXT, "htons");
+    lib_getaddrinfo = (lib_getaddrinfo_type)dlsym(RTLD_NEXT, "getaddrinfo")
     lib_send = (lib_send_type)dlsym(RTLD_NEXT, "send");
     lib_recv = (lib_recv_type)dlsym(RTLD_NEXT, "recv");
     lib_bind = (lib_bind_type)dlsym(RTLD_NEXT, "bind");
@@ -133,7 +141,10 @@ void HOOK_MAKE_LOG_STRING(char *buffer, const char *func_name, const unsigned in
         }
         case VT_string:
         {
-            snprintf(temp, 1024, "\"%s\"", (char *)(args[i]._var));
+            if(args[i]._var != 0)
+                snprintf(temp, 1024, "\"%s\"", (char *)(args[i]._var));
+            else
+                strcpy(temp, "0");
             break;
         }
         case VT_offset:
@@ -376,6 +387,29 @@ int connect(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
     };
     HOOK_LOG(LT_FILE, "connect", 3, args);
     int ret = lib_connect(sockfd, addr, addrlen);
+    return ret;
+}
+
+uint16_t htons(uint16_t hostshort)
+{
+    Variable args[1] = { 
+        { VT_unsigned_int, (long long int)hostshort }
+    };
+    HOOK_LOG(LT_FILE, "htons", 1, args);
+    uint16_t ret = lib_htons(hostshort);
+    return ret;
+}
+
+int getaddrinfo(const char *name, const char *service, const struct addrinfo *req, struct addrinfo **pai)
+{
+    Variable args[4] = { 
+        { VT_string, (long long int)name },
+        { VT_string, (long long int)service },
+        { VT_offset, (long long int)req },
+        { VT_offset, (long long int)pai }
+    };
+    HOOK_LOG(LT_FILE, "getaddrinfo", 4, args);
+    int ret = lib_getaddrinfo(name, service, req, pai);
     return ret;
 }
 
