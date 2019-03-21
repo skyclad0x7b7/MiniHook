@@ -4,6 +4,9 @@
 typedef FILE *(*lib_fopen_type)(const char *, const char *);
 lib_fopen_type lib_fopen = NULL;
 
+typedef FILE *(*lib_freopen_type)(const char *, const char *, FILE *);
+lib_freopen_type lib_freopen = NULL;
+
 typedef size_t(*lib_fwrite_type)(const void *, size_t, size_t, FILE *);
 lib_fwrite_type lib_fwrite = NULL;
 
@@ -25,11 +28,17 @@ lib_remove_type lib_remove = NULL;
 typedef int(*lib_rename_type)(const char *, const char *);
 lib_rename_type lib_rename = NULL;
 
+typedef int(*lib_readlink_type)(const char *, char *, size_t);
+lib_readlink_type lib_readlink = NULL;
+
 typedef mode_t(*lib_umask_type)(mode_t);
 lib_umask_type lib_umask = NULL;
 
 typedef pid_t(*lib_getpid_type)();
 lib_getpid_type lib_getpid = NULL;
+
+typedef uid_t(*lib_geteuid_type)();
+lib_geteuid_type lib_geteuid = NULL;
 
 typedef pid_t(*lib_fork_type)();
 lib_fork_type lib_fork = NULL;
@@ -65,10 +74,14 @@ typedef void (*sighandler_t)(int);
 typedef sighandler_t(*lib_signal_type)(int, sighandler_t);
 lib_signal_type lib_signal = NULL;
 
+typedef void(*lib_exit_type)(int);
+lib_exit_type lib_exit = NULL;
+
 static void con() __attribute__((constructor));
 void con()
 {
     lib_fopen = (lib_fopen_type)dlsym(RTLD_NEXT, "fopen");
+    lib_freopen = (lib_freopen_type)dlsym(RTLD_NEXT, "freopen");
     lib_fwrite = (lib_fwrite_type)dlsym(RTLD_NEXT, "fwrite");
     lib_fread = (lib_fread_type)dlsym(RTLD_NEXT, "fread");
     lib_fclose = (lib_fclose_type)dlsym(RTLD_NEXT, "fclose");
@@ -76,8 +89,10 @@ void con()
     lib_unlink = (lib_unlink_type)dlsym(RTLD_NEXT, "unlink");
     lib_remove = (lib_remove_type)dlsym(RTLD_NEXT, "remove");
     lib_rename = (lib_rename_type)dlsym(RTLD_NEXT, "rename");
+    lib_readlink = (lib_readlink_type)dlsym(RTLD_NEXT, "readlink");
     lib_umask = (lib_umask_type)dlsym(RTLD_NEXT, "umask");
     lib_getpid = (lib_getpid_type)dlsym(RTLD_NEXT, "getpid");
+    lib_geteuid = (lib_geteuid_type)dlsym(RTLD_NEXT, "geteuid");
     lib_fork = (lib_fork_type)dlsym(RTLD_NEXT, "fork");
     lib_system = (lib_system_type)dlsym(RTLD_NEXT, "system");
     lib_socket = (lib_socket_type)dlsym(RTLD_NEXT, "socket");
@@ -89,6 +104,7 @@ void con()
     lib_pthread_create = (lib_pthread_create_type)dlsym(RTLD_NEXT, "pthread_create");
     lib_kill = (lib_kill_type)dlsym(RTLD_NEXT, "kill");
     lib_signal = (lib_signal_type)dlsym(RTLD_NEXT, "signal");
+    lib_exit = (lib_exit_type)dlsym(RTLD_NEXT, "exit");
 }
 /************************************/
 
@@ -173,6 +189,18 @@ FILE *fopen(const char *filename, const char *mode)
     return ret;
 }
 
+FILE *freopen(const char *filename, const char *mode, FILE *stream)
+{
+	Variable args[3] = { 
+        { VT_string, (long long int)filename },
+        { VT_string, (long long int)mode },
+        { VT_offset, (long long int)stream }
+    };
+    HOOK_LOG(LT_FILE, "freopen", 3, args);
+    FILE *ret = lib_freopen(filename, mode, stream);
+    return ret;
+}
+
 size_t fwrite(const void *buffer, size_t size, size_t count, FILE *stream)
 {
     Variable args[4] = { 
@@ -251,6 +279,18 @@ int rename(const char *oldname, const char *newname)
     return ret;
 }
 
+int readlink(const char *path, char *buf, size_t bufsize)
+{
+	Variable args[3] = { 
+        { VT_string, (long long int)path },
+        { VT_offset, (long long int)buf },
+        { VT_unsigned_int, (long long int)bufsize }
+    };
+    HOOK_LOG(LT_FILE, "readlink", 3, args);
+    int ret = lib_readlink(path, buf, bufsize);
+    return ret;
+}
+
 mode_t umask(mode_t mode)
 {
     Variable args[1] = { 
@@ -265,6 +305,13 @@ pid_t getpid()
 {
     HOOK_LOG(LT_FILE, "getpid", 0, NULL);
     pid_t ret = lib_getpid();
+    return ret;
+}
+
+uid_t geteuid()
+{
+	HOOK_LOG(LT_FILE, "geteuid", 0, NULL);
+    uid_t ret = lib_geteuid();
     return ret;
 }
 
@@ -381,3 +428,13 @@ sighandler_t signal(int signum, sighandler_t handler)
     sighandler_t ret = lib_signal(signum, handler);
     return ret;
 }
+
+void exit(int status)
+{
+	Variable args[1] = { 
+        { VT_int, (long long int)status }
+    };
+    HOOK_LOG(LT_FILE, "exit", 1, args);
+	lib_exit(status)
+}
+
