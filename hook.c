@@ -77,7 +77,7 @@ typedef void (*sighandler_t)(int);
 typedef sighandler_t(*lib_signal_type)(int, sighandler_t);
 lib_signal_type lib_signal = NULL;
 
-typedef void __noreturn(*lib_exit_type)(int);
+typedef void (*lib_exit_type)(int);
 lib_exit_type lib_exit = NULL;
 
 static void con() __attribute__((constructor));
@@ -452,7 +452,7 @@ sighandler_t signal(int signum, sighandler_t handler)
     return ret;
 }
 
-void __noreturn exit(int status)
+void exit(int status)
 {
 	Variable args[1] = { 
         { VT_int, (long long int)status }
