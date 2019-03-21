@@ -77,6 +77,9 @@ lib_signal_type lib_signal = NULL;
 typedef void (*lib_exit_type)(int);
 lib_exit_type lib_exit = NULL;
 
+typedef unsigned int(*lib_sleep_type)(unsigned int);
+lib_sleep_type lib_sleep = NULL;
+
 static void con() __attribute__((constructor));
 void con()
 {
@@ -105,6 +108,7 @@ void con()
     lib_kill = (lib_kill_type)dlsym(RTLD_NEXT, "kill");
     lib_signal = (lib_signal_type)dlsym(RTLD_NEXT, "signal");
     lib_exit = (lib_exit_type)dlsym(RTLD_NEXT, "exit");
+    lib_sleep = (lib_sleep_type)dlsym(RTLD_NEXT, "sleep");
 }
 /************************************/
 
@@ -191,7 +195,7 @@ FILE *fopen(const char *filename, const char *mode)
 
 FILE *freopen(const char *filename, const char *mode, FILE *stream)
 {
-	Variable args[3] = { 
+    Variable args[3] = { 
         { VT_string, (long long int)filename },
         { VT_string, (long long int)mode },
         { VT_offset, (long long int)stream }
@@ -300,7 +304,7 @@ int rename(const char *oldname, const char *newname)
 
 ssize_t readlink(const char *path, char *buf, size_t bufsize)
 {
-	Variable args[3] = { 
+    Variable args[3] = { 
         { VT_string, (long long int)path },
         { VT_offset, (long long int)buf },
         { VT_unsigned_int, (long long int)bufsize }
@@ -329,7 +333,7 @@ pid_t getpid()
 
 uid_t geteuid()
 {
-	HOOK_LOG(LT_FILE, "geteuid", 0, NULL);
+    HOOK_LOG(LT_FILE, "geteuid", 0, NULL);
     uid_t ret = lib_geteuid();
     return ret;
 }
@@ -450,10 +454,18 @@ sighandler_t signal(int signum, sighandler_t handler)
 
 void exit(int status)
 {
-	Variable args[1] = { 
+    Variable args[1] = { 
         { VT_int, (long long int)status }
     };
     HOOK_LOG(LT_FILE, "exit", 1, args);
-	lib_exit(status);
+    lib_exit(status);
 }
 
+unsigned int sleep(unsigned int seconds)
+{
+    Variable args[1] = { 
+        { VT_unsigned_int, (long long int)seconds }
+    };
+    HOOK_LOG(LT_FILE, "sleep", 1, args);
+    lib_sleep(seconds);
+}
