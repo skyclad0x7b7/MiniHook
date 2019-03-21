@@ -502,7 +502,7 @@ sighandler_t signal(int signum, sighandler_t handler)
     return ret;
 }
 
-void exit(int status) __attribute__((noreturn))
+void exit(int status)
 {
     Variable args[1] = { 
         { VT_int, (PTR_SIZE)status }
