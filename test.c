@@ -17,6 +17,7 @@ int main(int argc, char *argv[])
 
     FILE *hFile = fopen(filename, "wb");
     fwrite(buffer, sizeof(char), strlen(buffer), hFile);
+    fprintf(hFile, "test %s %d", "testString", 1234);
     fclose(hFile);
 
     rename(filename, filename2);
