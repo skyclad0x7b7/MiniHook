@@ -88,7 +88,7 @@ void con()
     lib_listen = (lib_listen_type)dlsym(RTLD_NEXT, "listen");
     lib_pthread_create = (lib_pthread_create_type)dlsym(RTLD_NEXT, "pthread_create");
     lib_kill = (lib_kill_type)dlsym(RTLD_NEXT, "kill");
-    lib_signal = (lib_signal_type)dlsym(RTLD_NEXT, "signal")
+    lib_signal = (lib_signal_type)dlsym(RTLD_NEXT, "signal");
 }
 /************************************/
 
@@ -335,12 +335,12 @@ int recv(int s, void *buf, size_t len, int flags)
     return ret;
 }
 
-int bind(int socket, const struct sockaddr *address, socklen_t addresse_len)
+int bind(int socket, const struct sockaddr *address, socklen_t address_len)
 {
     Variable args[3] = { 
-        { VT_int, (long long int)s },
-        { VT_offset, (long long int)buf },
-        { VT_unsigned_int, (long long int)len }
+        { VT_int, (long long int)socket },
+        { VT_offset, (long long int)address },
+        { VT_unsigned_int, (long long int)address_len }
     };
     HOOK_LOG(LT_FILE, "bind", 3, args);
     int ret = lib_bind(socket, address, address_len);
@@ -354,7 +354,7 @@ int listen(int socket, int backlog)
         { VT_int, (long long int)backlog }
     };
     HOOK_LOG(LT_FILE, "listen", 2, args);
-    int ret = lib_bind(socket, backlog);
+    int ret = lib_listen(socket, backlog);
     return ret;
 }
 
@@ -378,6 +378,6 @@ sighandler_t signal(int signum, sighandler_t handler)
         { VT_offset, (long long int)handler }
     };
     HOOK_LOG(LT_FILE, "signal", 2, args);
-    int ret = lib_signal(signum, handler);
+    sighandler_t ret = lib_signal(signum, handler);
     return ret;
 }
