@@ -1,15 +1,14 @@
 #define _GNU_SOURCE
 
+#include <dlfcn.h>
+#include <pthread.h>
+#include <stdarg.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
-#include <dlfcn.h>
-#include <pthread.h>
-
-#include <sys/types.h>
-#include <sys/stat.h>
 #include <sys/socket.h>
-
+#include <sys/stat.h>
+#include <sys/types.h>
 #include <unistd.h>
 
 typedef enum _LoggingType
