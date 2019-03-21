@@ -10,9 +10,6 @@ lib_freopen_type lib_freopen = NULL;
 typedef size_t(*lib_fwrite_type)(const void *, size_t, size_t, FILE *);
 lib_fwrite_type lib_fwrite = NULL;
 
-typedef int (*lib_fprintf_type) (FILE *, const char *, ...);
-lib_fprintf_type lib_fprintf = NULL;
-
 typedef size_t(*lib_fread_type)(void *restrict, size_t, size_t, FILE *restrict);
 lib_fread_type lib_fread = NULL;
 
@@ -86,7 +83,6 @@ void con()
     lib_fopen = (lib_fopen_type)dlsym(RTLD_NEXT, "fopen");
     lib_freopen = (lib_freopen_type)dlsym(RTLD_NEXT, "freopen");
     lib_fwrite = (lib_fwrite_type)dlsym(RTLD_NEXT, "fwrite");
-    lib_fprintf = (lib_fprintf_type)dlsym(RTLD_NEXT, "fprintf");
     lib_fread = (lib_fread_type)dlsym(RTLD_NEXT, "fread");
     lib_fclose = (lib_fclose_type)dlsym(RTLD_NEXT, "fclose");
     lib_access = (lib_access_type)dlsym(RTLD_NEXT, "access");
@@ -223,7 +219,7 @@ int fprintf(FILE *stream, const char *format, ...)
     va_list ap;
     va_start(ap, format);
     char tmp[1024] = {0,};
-    snprintf(tmp, sizeof(tmp), format, ap);
+    vsnprintf(tmp, sizeof(tmp), format, ap);
     Variable args[2] = { 
         { VT_offset, (long long int)stream },
         { VT_string, (long long int)tmp }
@@ -232,7 +228,7 @@ int fprintf(FILE *stream, const char *format, ...)
     va_end(ap);
 
     va_start(ap, format);
-    int ret = lib_fprintf(stream, format, ap);
+    int ret = vfprintf(stream, format, ap);
     va_end(ap);
     return ret;
 }
