@@ -31,7 +31,7 @@ lib_remove_type lib_remove = NULL;
 typedef int(*lib_rename_type)(const char *, const char *);
 lib_rename_type lib_rename = NULL;
 
-typedef int(*lib_readlink_type)(const char *, char *, size_t);
+typedef ssize_t(*lib_readlink_type)(const char *, char *, size_t);
 lib_readlink_type lib_readlink = NULL;
 
 typedef mode_t(*lib_umask_type)(mode_t);
@@ -77,7 +77,7 @@ typedef void (*sighandler_t)(int);
 typedef sighandler_t(*lib_signal_type)(int, sighandler_t);
 lib_signal_type lib_signal = NULL;
 
-typedef void(*lib_exit_type)(int);
+typedef void __noreturn(*lib_exit_type)(int);
 lib_exit_type lib_exit = NULL;
 
 static void con() __attribute__((constructor));
@@ -302,7 +302,7 @@ int rename(const char *oldname, const char *newname)
     return ret;
 }
 
-int readlink(const char *path, char *buf, size_t bufsize)
+ssize_t readlink(const char *path, char *buf, size_t bufsize)
 {
 	Variable args[3] = { 
         { VT_string, (long long int)path },
@@ -310,7 +310,7 @@ int readlink(const char *path, char *buf, size_t bufsize)
         { VT_unsigned_int, (long long int)bufsize }
     };
     HOOK_LOG(LT_FILE, "readlink", 3, args);
-    int ret = lib_readlink(path, buf, bufsize);
+    ssize_t ret = lib_readlink(path, buf, bufsize);
     return ret;
 }
 
@@ -452,12 +452,12 @@ sighandler_t signal(int signum, sighandler_t handler)
     return ret;
 }
 
-void exit(int status)
+void __noreturn exit(int status)
 {
 	Variable args[1] = { 
         { VT_int, (long long int)status }
     };
     HOOK_LOG(LT_FILE, "exit", 1, args);
-	lib_exit(status)
+	lib_exit(status);
 }
 
