@@ -13,6 +13,12 @@
 #include <unistd.h>
 #include <netdb.h>
 
+#ifdef _X64
+typedef (uint64_t) PTR_SIZE;
+#else
+typedef (uint32_t) PTR_SIZE;
+#endif
+
 typedef enum _LoggingType
 {
     LT_STDOUT = 1,
@@ -33,5 +39,5 @@ typedef enum _VariableType
 typedef struct _Variable
 {
     VariableType _type;
-    long long int _var;
+    PTR_SIZE _var;
 } Variable;

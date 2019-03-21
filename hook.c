@@ -200,8 +200,8 @@ void HOOK_LOG(const LoggingType loggingType, const char *func_name, const unsign
 FILE *fopen(const char *filename, const char *mode)
 {
     Variable args[2] = { 
-        { VT_string, (long long int)filename },
-        { VT_string, (long long int)mode }
+        { VT_string, (PTR_SIZE)filename },
+        { VT_string, (PTR_SIZE)mode }
     };
     HOOK_LOG(LT_FILE, "fopen", 2, args);
     FILE *ret = lib_fopen(filename, mode);
@@ -211,9 +211,9 @@ FILE *fopen(const char *filename, const char *mode)
 FILE *freopen(const char *filename, const char *mode, FILE *stream)
 {
     Variable args[3] = { 
-        { VT_string, (long long int)filename },
-        { VT_string, (long long int)mode },
-        { VT_offset, (long long int)stream }
+        { VT_string, (PTR_SIZE)filename },
+        { VT_string, (PTR_SIZE)mode },
+        { VT_offset, (PTR_SIZE)stream }
     };
     HOOK_LOG(LT_FILE, "freopen", 3, args);
     FILE *ret = lib_freopen(filename, mode, stream);
@@ -223,10 +223,10 @@ FILE *freopen(const char *filename, const char *mode, FILE *stream)
 size_t fwrite(const void *buffer, size_t size, size_t count, FILE *stream)
 {
     Variable args[4] = { 
-        { VT_string, (long long int)buffer },
-        { VT_unsigned_int, (long long int)size },
-        { VT_unsigned_int, (long long int)count },
-        { VT_offset, (long long int)stream }
+        { VT_string, (PTR_SIZE)buffer },
+        { VT_unsigned_int, (PTR_SIZE)size },
+        { VT_unsigned_int, (PTR_SIZE)count },
+        { VT_offset, (PTR_SIZE)stream }
     };
     HOOK_LOG(LT_FILE, "fwrite", 4, args);
     size_t ret = lib_fwrite(buffer, size, count, stream);
@@ -240,8 +240,8 @@ int fprintf(FILE *stream, const char *format, ...)
     char tmp[1024] = {0,};
     vsnprintf(tmp, sizeof(tmp), format, ap);
     Variable args[2] = { 
-        { VT_offset, (long long int)stream },
-        { VT_string, (long long int)tmp }
+        { VT_offset, (PTR_SIZE)stream },
+        { VT_string, (PTR_SIZE)tmp }
     };
     HOOK_LOG(LT_FILE, "fprintf", 2, args);
     va_end(ap);
@@ -255,10 +255,10 @@ int fprintf(FILE *stream, const char *format, ...)
 size_t fread(void *restrict buffer, size_t size, size_t count, FILE *restrict stream)
 {
     Variable args[4] = { 
-        { VT_string, (long long int)buffer },
-        { VT_unsigned_int, (long long int)size },
-        { VT_unsigned_int, (long long int)count },
-        { VT_offset, (long long int)stream }
+        { VT_string, (PTR_SIZE)buffer },
+        { VT_unsigned_int, (PTR_SIZE)size },
+        { VT_unsigned_int, (PTR_SIZE)count },
+        { VT_offset, (PTR_SIZE)stream }
     };
     HOOK_LOG(LT_FILE, "fread", 4, args);
     size_t ret = lib_fread(buffer, size, count, stream);
@@ -268,7 +268,7 @@ size_t fread(void *restrict buffer, size_t size, size_t count, FILE *restrict st
 int fclose(FILE *stream)
 {
     Variable args[1] = { 
-        { VT_offset, (long long int)stream }
+        { VT_offset, (PTR_SIZE)stream }
     };
     HOOK_LOG(LT_FILE, "fclose", 1, args);
     int ret = lib_fclose(stream);
@@ -278,8 +278,8 @@ int fclose(FILE *stream)
 int access(const char *pathname, int mode)
 {
     Variable args[2] = { 
-        { VT_string, (long long int)pathname },
-        { VT_unsigned_int, (long long int)mode }
+        { VT_string, (PTR_SIZE)pathname },
+        { VT_unsigned_int, (PTR_SIZE)mode }
     };
     HOOK_LOG(LT_FILE, "access", 2, args);
     int ret = lib_access(pathname, mode);
@@ -289,7 +289,7 @@ int access(const char *pathname, int mode)
 int unlink(const char *filename)
 {
     Variable args[1] = { 
-        { VT_string, (long long int)filename }
+        { VT_string, (PTR_SIZE)filename }
     };
     HOOK_LOG(LT_FILE, "unlink", 1, args);
     int ret = lib_unlink(filename);
@@ -299,7 +299,7 @@ int unlink(const char *filename)
 int remove(const char *filename)
 {
     Variable args[1] = { 
-        { VT_string, (long long int)filename }
+        { VT_string, (PTR_SIZE)filename }
     };
     HOOK_LOG(LT_FILE, "remove", 1, args);
     int ret = lib_remove(filename);
@@ -309,8 +309,8 @@ int remove(const char *filename)
 int rename(const char *oldname, const char *newname)
 {
     Variable args[2] = { 
-        { VT_string, (long long int)oldname },
-        { VT_string, (long long int)newname }
+        { VT_string, (PTR_SIZE)oldname },
+        { VT_string, (PTR_SIZE)newname }
     };
     HOOK_LOG(LT_FILE, "remove", 2, args);
     int ret = lib_rename(oldname, newname);
@@ -320,9 +320,9 @@ int rename(const char *oldname, const char *newname)
 ssize_t readlink(const char *path, char *buf, size_t bufsize)
 {
     Variable args[3] = { 
-        { VT_string, (long long int)path },
-        { VT_offset, (long long int)buf },
-        { VT_unsigned_int, (long long int)bufsize }
+        { VT_string, (PTR_SIZE)path },
+        { VT_offset, (PTR_SIZE)buf },
+        { VT_unsigned_int, (PTR_SIZE)bufsize }
     };
     HOOK_LOG(LT_FILE, "readlink", 3, args);
     ssize_t ret = lib_readlink(path, buf, bufsize);
@@ -332,7 +332,7 @@ ssize_t readlink(const char *path, char *buf, size_t bufsize)
 mode_t umask(mode_t mode)
 {
     Variable args[1] = { 
-        { VT_unsigned_int, (long long int)mode }
+        { VT_unsigned_int, (PTR_SIZE)mode }
     };
     HOOK_LOG(LT_FILE, "umask", 1, args);
     mode_t ret = lib_umask(mode);
@@ -363,9 +363,9 @@ pid_t fork()
 pid_t waitpid(pid_t pid, int *stat_loc, int options)
 {
     Variable args[3] = { 
-        { VT_unsigned_int, (long long int)pid },
-        { VT_offset, (long long int)stat_loc },
-        { VT_int, (long long int)options }
+        { VT_unsigned_int, (PTR_SIZE)pid },
+        { VT_offset, (PTR_SIZE)stat_loc },
+        { VT_int, (PTR_SIZE)options }
     };
     HOOK_LOG(LT_FILE, "waitpid", 3, args);
     pid_t ret = lib_waitpid(stat_loc);
@@ -375,7 +375,7 @@ pid_t waitpid(pid_t pid, int *stat_loc, int options)
 int system(const char *command)
 {
     Variable args[1] = { 
-        { VT_string, (long long int)command }
+        { VT_string, (PTR_SIZE)command }
     };
     HOOK_LOG(LT_FILE, "system", 1, args);
     int ret = lib_system(command);
@@ -385,9 +385,9 @@ int system(const char *command)
 int socket(int domain, int type, int protocol)
 {
     Variable args[3] = { 
-        { VT_int, (long long int)domain },
-        { VT_int, (long long int)type },
-        { VT_int, (long long int)protocol }
+        { VT_int, (PTR_SIZE)domain },
+        { VT_int, (PTR_SIZE)type },
+        { VT_int, (PTR_SIZE)protocol }
     };
     HOOK_LOG(LT_FILE, "socket", 3, args);
     int ret = lib_socket(domain, type, protocol);
@@ -397,9 +397,9 @@ int socket(int domain, int type, int protocol)
 int connect(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
 {
     Variable args[3] = { 
-        { VT_int, (long long int)sockfd },
-        { VT_offset, (long long int)addr },
-        { VT_unsigned_int, (long long int)addrlen }
+        { VT_int, (PTR_SIZE)sockfd },
+        { VT_offset, (PTR_SIZE)addr },
+        { VT_unsigned_int, (PTR_SIZE)addrlen }
     };
     HOOK_LOG(LT_FILE, "connect", 3, args);
     int ret = lib_connect(sockfd, addr, addrlen);
@@ -409,7 +409,7 @@ int connect(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
 uint16_t htons(uint16_t hostshort)
 {
     Variable args[1] = { 
-        { VT_unsigned_int, (long long int)hostshort }
+        { VT_unsigned_int, (PTR_SIZE)hostshort }
     };
     HOOK_LOG(LT_FILE, "htons", 1, args);
     uint16_t ret = lib_htons(hostshort);
@@ -419,10 +419,10 @@ uint16_t htons(uint16_t hostshort)
 int getaddrinfo(const char *name, const char *service, const struct addrinfo *req, struct addrinfo **pai)
 {
     Variable args[4] = { 
-        { VT_string, (long long int)name },
-        { VT_string, (long long int)service },
-        { VT_offset, (long long int)req },
-        { VT_offset, (long long int)pai }
+        { VT_string, (PTR_SIZE)name },
+        { VT_string, (PTR_SIZE)service },
+        { VT_offset, (PTR_SIZE)req },
+        { VT_offset, (PTR_SIZE)pai }
     };
     HOOK_LOG(LT_FILE, "getaddrinfo", 4, args);
     int ret = lib_getaddrinfo(name, service, req, pai);
@@ -432,10 +432,10 @@ int getaddrinfo(const char *name, const char *service, const struct addrinfo *re
 ssize_t send(int s, const void *msg, size_t len, int flags)
 {
     Variable args[4] = { 
-        { VT_int, (long long int)s },
-        { VT_offset, (long long int)msg },
-        { VT_unsigned_int, (long long int)len },
-        { VT_int, (long long int)flags }
+        { VT_int, (PTR_SIZE)s },
+        { VT_offset, (PTR_SIZE)msg },
+        { VT_unsigned_int, (PTR_SIZE)len },
+        { VT_int, (PTR_SIZE)flags }
     };
     HOOK_LOG(LT_FILE, "send", 4, args);
     ssize_t ret = lib_send(s, msg, len, flags);
@@ -445,10 +445,10 @@ ssize_t send(int s, const void *msg, size_t len, int flags)
 ssize_t recv(int s, void *buf, size_t len, int flags)
 {
     Variable args[4] = { 
-        { VT_int, (long long int)s },
-        { VT_offset, (long long int)buf },
-        { VT_unsigned_int, (long long int)len },
-        { VT_int, (long long int)flags }
+        { VT_int, (PTR_SIZE)s },
+        { VT_offset, (PTR_SIZE)buf },
+        { VT_unsigned_int, (PTR_SIZE)len },
+        { VT_int, (PTR_SIZE)flags }
     };
     HOOK_LOG(LT_FILE, "recv", 4, args);
     ssize_t ret = lib_recv(s, buf, len, flags);
@@ -458,9 +458,9 @@ ssize_t recv(int s, void *buf, size_t len, int flags)
 int bind(int socket, const struct sockaddr *address, socklen_t address_len)
 {
     Variable args[3] = { 
-        { VT_int, (long long int)socket },
-        { VT_offset, (long long int)address },
-        { VT_unsigned_int, (long long int)address_len }
+        { VT_int, (PTR_SIZE)socket },
+        { VT_offset, (PTR_SIZE)address },
+        { VT_unsigned_int, (PTR_SIZE)address_len }
     };
     HOOK_LOG(LT_FILE, "bind", 3, args);
     int ret = lib_bind(socket, address, address_len);
@@ -470,8 +470,8 @@ int bind(int socket, const struct sockaddr *address, socklen_t address_len)
 int listen(int socket, int backlog)
 {
     Variable args[2] = { 
-        { VT_int, (long long int)socket },
-        { VT_int, (long long int)backlog }
+        { VT_int, (PTR_SIZE)socket },
+        { VT_int, (PTR_SIZE)backlog }
     };
     HOOK_LOG(LT_FILE, "listen", 2, args);
     int ret = lib_listen(socket, backlog);
@@ -481,10 +481,10 @@ int listen(int socket, int backlog)
 int pthread_create(pthread_t *restrict thread, const pthread_attr_t *restrict attr, void *(*start_routine)(void *), void *restrictarg)
 {
     Variable args[4] = { 
-        { VT_offset, (long long int)thread },
-        { VT_offset, (long long int)attr },
-        { VT_offset, (long long int)start_routine },
-        { VT_offset, (long long int)restrictarg }
+        { VT_offset, (PTR_SIZE)thread },
+        { VT_offset, (PTR_SIZE)attr },
+        { VT_offset, (PTR_SIZE)start_routine },
+        { VT_offset, (PTR_SIZE)restrictarg }
     };
     HOOK_LOG(LT_FILE, "pthread_create", 4, args);
     int ret = lib_pthread_create(thread, attr, start_routine, restrictarg);
@@ -494,8 +494,8 @@ int pthread_create(pthread_t *restrict thread, const pthread_attr_t *restrict at
 sighandler_t signal(int signum, sighandler_t handler)
 {
     Variable args[2] = { 
-        { VT_unsigned_int, (long long int)signum },
-        { VT_offset, (long long int)handler }
+        { VT_unsigned_int, (PTR_SIZE)signum },
+        { VT_offset, (PTR_SIZE)handler }
     };
     HOOK_LOG(LT_FILE, "signal", 2, args);
     sighandler_t ret = lib_signal(signum, handler);
@@ -505,7 +505,7 @@ sighandler_t signal(int signum, sighandler_t handler)
 void exit(int status)
 {
     Variable args[1] = { 
-        { VT_int, (long long int)status }
+        { VT_int, (PTR_SIZE)status }
     };
     HOOK_LOG(LT_FILE, "exit", 1, args);
     lib_exit(status);
@@ -514,7 +514,7 @@ void exit(int status)
 unsigned int sleep(unsigned int seconds)
 {
     Variable args[1] = { 
-        { VT_unsigned_int, (long long int)seconds }
+        { VT_unsigned_int, (PTR_SIZE)seconds }
     };
     HOOK_LOG(LT_FILE, "sleep", 1, args);
     lib_sleep(seconds);
