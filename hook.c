@@ -43,7 +43,7 @@ lib_socket_type lib_socket = NULL;
 typedef int(*lib_connect_type)(int, const struct sockaddr *, socklen_t);
 lib_connect_type lib_connect = NULL;
 
-typedef int(*lib_send_type)(int, const void *, size_t, int);
+typedef ssize_t(*lib_send_type)(int, const void *, size_t, int);
 lib_send_type lib_send = NULL;
 
 typedef ssize_t(*lib_recv_type)(int, void *, size_t, int);
@@ -309,7 +309,7 @@ int connect(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
     return ret;
 }
 
-int send(int s, const void *msg, size_t len, int flags)
+ssize_t send(int s, const void *msg, size_t len, int flags)
 {
     Variable args[4] = { 
         { VT_int, (long long int)s },
@@ -318,7 +318,7 @@ int send(int s, const void *msg, size_t len, int flags)
         { VT_int, (long long int)flags }
     };
     HOOK_LOG(LT_FILE, "send", 4, args);
-    int ret = lib_send(s, msg, len, flags);
+    ssize_t ret = lib_send(s, msg, len, flags);
     return ret;
 }
 
