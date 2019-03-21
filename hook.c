@@ -43,6 +43,9 @@ lib_geteuid_type lib_geteuid = NULL;
 typedef pid_t(*lib_fork_type)();
 lib_fork_type lib_fork = NULL;
 
+typedef pid_t(*lib_waitpid_type)(pid_t, int *, int);
+lib_waitpid_type lib_waitpid = NULL;
+
 typedef int(*lib_system_type)(const char *);
 lib_system_type lib_system = NULL;
 
@@ -103,6 +106,7 @@ void con()
     lib_getpid = (lib_getpid_type)dlsym(RTLD_NEXT, "getpid");
     lib_geteuid = (lib_geteuid_type)dlsym(RTLD_NEXT, "geteuid");
     lib_fork = (lib_fork_type)dlsym(RTLD_NEXT, "fork");
+    lib_waitpid = (lib_waitpid_type)dlsym(RTLD_NEXT, "waitpid");
     lib_system = (lib_system_type)dlsym(RTLD_NEXT, "system");
     lib_socket = (lib_socket_type)dlsym(RTLD_NEXT, "socket");
     lib_connect = (lib_connect_type)dlsym(RTLD_NEXT, "connect");
@@ -353,6 +357,18 @@ pid_t fork()
 {
     HOOK_LOG(LT_FILE, "fork", 0, NULL);
     pid_t ret = lib_fork();
+    return ret;
+}
+
+pid_t waitpid(pid_t pid, int *stat_loc, int options)
+{
+    Variable args[3] = { 
+        { VT_unsigned_int, (long long int)pid },
+        { VT_offset, (long long int)stat_loc },
+        { VT_int, (long long int)options }
+    };
+    HOOK_LOG(LT_FILE, "waitpid", 3, args);
+    pid_t ret = lib_waitpid(stat_loc);
     return ret;
 }
 
