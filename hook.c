@@ -111,7 +111,7 @@ void con()
     lib_socket = (lib_socket_type)dlsym(RTLD_NEXT, "socket");
     lib_connect = (lib_connect_type)dlsym(RTLD_NEXT, "connect");
     lib_htons = (lib_htons_type)dlsym(RTLD_NEXT, "htons");
-    lib_getaddrinfo = (lib_getaddrinfo_type)dlsym(RTLD_NEXT, "getaddrinfo")
+    lib_getaddrinfo = (lib_getaddrinfo_type)dlsym(RTLD_NEXT, "getaddrinfo");
     lib_send = (lib_send_type)dlsym(RTLD_NEXT, "send");
     lib_recv = (lib_recv_type)dlsym(RTLD_NEXT, "recv");
     lib_bind = (lib_bind_type)dlsym(RTLD_NEXT, "bind");

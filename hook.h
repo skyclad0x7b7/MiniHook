@@ -11,6 +11,7 @@
 #include <sys/types.h>
 #include <arpa/inet.h>
 #include <unistd.h>
+#include <netdb.h>
 
 typedef enum _LoggingType
 {
