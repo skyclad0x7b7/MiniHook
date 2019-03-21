@@ -14,9 +14,9 @@
 #include <netdb.h>
 
 #ifdef _X64
-typedef (uint64_t) PTR_SIZE;
+typedef uint64_t PTR_SIZE;
 #else
-typedef (uint32_t) PTR_SIZE;
+typedef uint32_t PTR_SIZE;
 #endif
 
 typedef enum _LoggingType

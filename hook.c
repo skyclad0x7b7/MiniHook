@@ -368,7 +368,7 @@ pid_t waitpid(pid_t pid, int *stat_loc, int options)
         { VT_int, (PTR_SIZE)options }
     };
     HOOK_LOG(LT_FILE, "waitpid", 3, args);
-    pid_t ret = lib_waitpid(stat_loc);
+    pid_t ret = lib_waitpid(pid, stat_loc, options);
     return ret;
 }
 
@@ -502,7 +502,7 @@ sighandler_t signal(int signum, sighandler_t handler)
     return ret;
 }
 
-void exit(int status)
+void exit(int status) __attribute__((noreturn))
 {
     Variable args[1] = { 
         { VT_int, (PTR_SIZE)status }
