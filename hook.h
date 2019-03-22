@@ -14,9 +14,9 @@
 #include <netdb.h>
 
 #ifdef _X64
-typedef uint64_t PTR_SIZE;
+typedef uint64_t PTR_TYPE;
 #else
-typedef uint32_t PTR_SIZE;
+typedef uint32_t PTR_TYPE;
 #endif
 
 typedef enum _LoggingType
@@ -39,5 +39,5 @@ typedef enum _VariableType
 typedef struct _Variable
 {
     VariableType _type;
-    PTR_SIZE _var;
+    PTR_TYPE _var;
 } Variable;
