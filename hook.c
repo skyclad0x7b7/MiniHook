@@ -1,92 +1,33 @@
 #include "hook.h"
 
-/***** Initialize org function *****/
-typedef FILE *(*lib_fopen_type)(const char *, const char *);
 lib_fopen_type lib_fopen = NULL;
-
-typedef FILE *(*lib_freopen_type)(const char *, const char *, FILE *);
 lib_freopen_type lib_freopen = NULL;
-
-typedef size_t(*lib_fwrite_type)(const void *, size_t, size_t, FILE *);
 lib_fwrite_type lib_fwrite = NULL;
-
-typedef size_t(*lib_fread_type)(void *restrict, size_t, size_t, FILE *restrict);
 lib_fread_type lib_fread = NULL;
-
-typedef int(*lib_fclose_type)(FILE *);
 lib_fclose_type lib_fclose = NULL;
-
-typedef int(*lib_access_type)(const char *, int);
 lib_access_type lib_access = NULL;
-
-typedef int(*lib_unlink_type)(const char *);
 lib_unlink_type lib_unlink = NULL;
-
-typedef int(*lib_remove_type)(const char *);
 lib_remove_type lib_remove = NULL;
-
-typedef int(*lib_rename_type)(const char *, const char *);
 lib_rename_type lib_rename = NULL;
-
-typedef ssize_t(*lib_readlink_type)(const char *, char *, size_t);
 lib_readlink_type lib_readlink = NULL;
-
-typedef mode_t(*lib_umask_type)(mode_t);
 lib_umask_type lib_umask = NULL;
-
-typedef pid_t(*lib_getpid_type)();
 lib_getpid_type lib_getpid = NULL;
-
-typedef uid_t(*lib_geteuid_type)();
 lib_geteuid_type lib_geteuid = NULL;
-
-typedef pid_t(*lib_fork_type)();
 lib_fork_type lib_fork = NULL;
-
-typedef pid_t(*lib_waitpid_type)(pid_t, int *, int);
 lib_waitpid_type lib_waitpid = NULL;
-
-typedef int(*lib_system_type)(const char *);
 lib_system_type lib_system = NULL;
-
-typedef int(*lib_socket_type)(int, int, int);
 lib_socket_type lib_socket = NULL;
-
-typedef uint16_t(*lib_htons_type)(uint16_t);
 lib_htons_type lib_htons = NULL;
-
-typedef int(*lib_getaddrinfo_type)(const char *, const char *, const struct addrinfo *, struct addrinfo **);
 lib_getaddrinfo_type lib_getaddrinfo = NULL;
-
-typedef int(*lib_connect_type)(int, const struct sockaddr *, socklen_t);
 lib_connect_type lib_connect = NULL;
-
-typedef ssize_t(*lib_send_type)(int, const void *, size_t, int);
 lib_send_type lib_send = NULL;
-
-typedef ssize_t(*lib_recv_type)(int, void *, size_t, int);
 lib_recv_type lib_recv = NULL;
-
-typedef int(*lib_bind_type)(int, const struct sockaddr *, socklen_t);
 lib_bind_type lib_bind = NULL;
-
-typedef int(*lib_listen_type)(int, int);
 lib_listen_type lib_listen = NULL;
-
-typedef int(*lib_pthread_create_type)(pthread_t *restrict, const pthread_attr_t *restrict, void *(*start_routine)(void *), void *);
 lib_pthread_create_type lib_pthread_create = NULL;
-
-typedef int(*lib_kill_type)(int, int);
 lib_kill_type lib_kill = NULL;
-
-typedef void (*sighandler_t)(int);
-typedef sighandler_t(*lib_signal_type)(int, sighandler_t);
 lib_signal_type lib_signal = NULL;
-
-typedef void (*lib_exit_type)(int);
 lib_exit_type lib_exit = NULL;
-
-typedef unsigned int(*lib_sleep_type)(unsigned int);
 lib_sleep_type lib_sleep = NULL;
 
 static void con() __attribute__((constructor));

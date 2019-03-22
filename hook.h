@@ -1,17 +1,4 @@
-#define _GNU_SOURCE
-
-#include <dlfcn.h>
-#include <pthread.h>
-#include <stdarg.h>
-#include <stdbool.h>
-#include <stdio.h>
-#include <string.h>
-#include <sys/socket.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <arpa/inet.h>
-#include <unistd.h>
-#include <netdb.h>
+#include "libc_func.h"
 
 #ifdef _X64
 typedef uint64_t PTR_TYPE;
