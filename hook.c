@@ -219,7 +219,7 @@ void HOOK_LOG_RET(PTR_TYPE ret, VariableType varType)
         }
         case VT_string:
         {
-            if(args[i]._var != 0)
+            if(ret != 0)
                 snprintf(temp, 1024, "\"%s\"\n", (char *)(ret));
             else
                 strcpy(temp, "0\n");
@@ -240,7 +240,6 @@ void HOOK_LOG_RET(PTR_TYPE ret, VariableType varType)
         lib_fclose(hFile);    
         }
     }
-    break;
 }
 
  /* ========================================================== */
