@@ -62,7 +62,7 @@ extern lib_geteuid_type lib_geteuid;
 typedef pid_t(*lib_fork_type)();
 extern lib_fork_type lib_fork;
 
-typedef pid_t(*lib_waitpid_type)(pid_t, int);
+typedef pid_t(*lib_waitpid_type)(pid_t, int *, int);
 extern lib_waitpid_type lib_waitpid;
 
 typedef int(*lib_system_type)(const char *);
