@@ -240,7 +240,7 @@ int fprintf(FILE *stream, const char *format, ...)
     return ret;
 }
 
-size_t fread(void *restrict buffer, size_t size, size_t count, FILE *restrict stream)
+size_t fread(void *buffer, size_t size, size_t count, FILE *stream)
 {
     Variable args[4] = { 
         { VT_string, (PTR_TYPE)buffer },
@@ -467,7 +467,7 @@ int listen(int socket, int backlog)
     return ret;
 }
 
-int pthread_create(pthread_t *restrict thread, const pthread_attr_t *restrict attr, void *(*start_routine)(void *), void *restrictarg)
+int pthread_create(pthread_t *thread, const pthread_attr_t *attr, void *(*start_routine)(void *), void *restrictarg)
 {
     Variable args[4] = { 
         { VT_offset, (PTR_TYPE)thread },

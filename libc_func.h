@@ -29,7 +29,7 @@ extern lib_freopen_type lib_freopen;
 typedef size_t(*lib_fwrite_type)(const void *, size_t, size_t, FILE *);
 extern lib_fwrite_type lib_fwrite;
 
-typedef size_t(*lib_fread_type)(void *restrict, size_t, size_t, FILE *restrict);
+typedef size_t(*lib_fread_type)(void *, size_t, size_t, FILE *);
 extern lib_fread_type lib_fread;
 
 typedef int(*lib_fclose_type)(FILE *);
@@ -92,7 +92,7 @@ extern lib_bind_type lib_bind;
 typedef int(*lib_listen_type)(int, int);
 extern lib_listen_type lib_listen;
 
-typedef int(*lib_pthread_create_type)(pthread_t *restrict, const pthread_attr_t *restrict, void *(*start_routine)(void *), void *);
+typedef int(*lib_pthread_create_type)(pthread_t *, const pthread_attr_t *, void *(*start_routine)(void *), void *);
 extern lib_pthread_create_type lib_pthread_create;
 
 typedef int(*lib_kill_type)(int, int);
