@@ -235,10 +235,10 @@ void HOOK_LOG_RET(PTR_TYPE ret, VariableType varType)
             snprintf(temp, 1024, "[UNKNOWN_TYPE_ERROR]\n");
             break;
         }
+        }
         strcat(buffer, temp);
         lib_fwrite(buffer, sizeof(char), strlen(buffer), hFile);
-        lib_fclose(hFile);    
-        }
+        lib_fclose(hFile); 
     }
 }
 
