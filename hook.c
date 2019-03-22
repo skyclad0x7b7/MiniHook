@@ -402,8 +402,8 @@ uid_t geteuid()
 
 pid_t fork()
 {
-    HOOK_LOG(LT_FILE, "fork", 0, NULL);
     pid_t ret = lib_fork();
+    HOOK_LOG(LT_FILE, "fork", 0, NULL);
     HOOK_LOG_RET(ret, VT_int);
     return ret;
 }
