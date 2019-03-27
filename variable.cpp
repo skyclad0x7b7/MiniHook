@@ -75,7 +75,7 @@ std::string Variable::ToString() const
         }
     case VariableType::VT_offset:
         {
-            snprintf(buf, sizeof(buf), "0x%x, static_cast<unsigned int>(_data));
+            snprintf(buf, sizeof(buf), "0x%x", static_cast<unsigned int>(_data));
             ret.assign(buf);
             break;
         }
