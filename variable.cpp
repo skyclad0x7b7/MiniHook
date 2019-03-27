@@ -59,6 +59,7 @@ std::string Variable::ToString() const
             break;
         }
     }
+    return ret;
 }
 
 }
