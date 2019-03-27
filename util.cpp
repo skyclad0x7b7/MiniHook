@@ -11,7 +11,7 @@ std::string MakeLogString(char *func_name, int argc, Variable *argv)
     {
         ret += argv[i].ToString();
         if(i+1 != argc)
-            ret += ", "
+            ret += ", ";
     }
     ret += ")";
     return ret;
