@@ -41,15 +41,36 @@ std::string Variable::ToString() const
             ret.assign(buf);
             break;
         }
+    case VariableType::VT_unsigned_short:
+        {
+            snprintf(buf, sizeof(buf), "%u", static_cast<unsigned short>(_data));
+            ret.assign(buf);
+            break;
+        }
     case VariableType::VT_int:
         {
             snprintf(buf, sizeof(buf), "%d", static_cast<int>(_data));
             ret.assign(buf);
             break;
         }
+    case VariableType::VT_unsigned_int:
+        {
+            snprintf(buf, sizeof(buf), "%u", static_cast<unsigned int>(_data));
+            ret.assign(buf);
+            break;
+        }
     case VariableType::VT_char_array:
         {
-            snprintf(buf, sizeof(buf), "\"%s\"", reinterpret_cast<char *>(_data));
+            if(_data == 0)
+                strcpy(buf, "NULL");
+            else
+                snprintf(buf, sizeof(buf), "\"%s\"", reinterpret_cast<char *>(_data));
+            ret.assign(buf);
+            break;
+        }
+    case VariableType::VT_offset:
+        {
+            snprintf(buf, sizeof(buf), "\"0x%x\"", static_cast<unsigned int>(_data));
             ret.assign(buf);
             break;
         }

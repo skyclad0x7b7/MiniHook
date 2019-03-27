@@ -19,8 +19,11 @@ enum class VariableType
     VT_bool,
     VT_char,
     VT_short,
+    VT_unsigned_short,
     VT_int,
-    VT_char_array
+    VT_unsigned_int,
+    VT_char_array,
+    VT_offset
 };
 
 class Variable

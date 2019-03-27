@@ -69,10 +69,11 @@ void con()
 FILE *fopen(const char *filename, const char *mode)
 {
     Variable args[2] = { 
-        { VT_string, (PTR_TYPE)filename },
-        { VT_string, (PTR_TYPE)mode }
+        Variable(VariableType::VT_char_array, (PTR_TYPE)filename),
+        Variable(VariableType::VT_char_array, (PTR_TYPE)mode)
     };
-    HOOK_LOG(LT_FILE, "fopen", 2, args);
+    Logger::instance().log(MakeLogString("fopen", 2, args) + "\n");
+
     FILE *ret = lib_fopen(filename, mode);
     return ret;
 }
@@ -80,11 +81,12 @@ FILE *fopen(const char *filename, const char *mode)
 FILE *freopen(const char *filename, const char *mode, FILE *stream)
 {
     Variable args[3] = { 
-        { VT_string, (PTR_TYPE)filename },
-        { VT_string, (PTR_TYPE)mode },
-        { VT_offset, (PTR_TYPE)stream }
+        Variable(VariableType::VT_char_array, (PTR_TYPE)filename),
+        Variable(VariableType::VT_char_array, (PTR_TYPE)mode),
+        Variable(VariableType::VT_offset, (PTR_TYPE)stream)
     };
-    HOOK_LOG(LT_FILE, "freopen", 3, args);
+    Logger::instance().log(MakeLogString("freopen", 3, args) + "\n");
+
     FILE *ret = lib_freopen(filename, mode, stream);
     return ret;
 }
@@ -92,13 +94,14 @@ FILE *freopen(const char *filename, const char *mode, FILE *stream)
 size_t fwrite(const void *buffer, size_t size, size_t count, FILE *stream)
 {
     Variable args[4] = { 
-        { VT_string, (PTR_TYPE)buffer },
-        { VT_unsigned_int, (PTR_TYPE)size },
-        { VT_unsigned_int, (PTR_TYPE)count },
-        { VT_offset, (PTR_TYPE)stream }
+        Variable(VariableType::VT_char_array, (PTR_TYPE)buffer),
+        Variable(VariableType::VT_unsigned_int, (PTR_TYPE)size),
+        Variable(VariableType::VT_unsigned_int, (PTR_TYPE)count),
+        Variable(VariableType::VT_offset, (PTR_TYPE)stream)
     };
-    HOOK_LOG(LT_FILE, "fwrite", 4, args);
-    size_t ret = lib_fwrite(buffer, size, count, stream);
+    Logger::instance().log(MakeLogString("fwrite", 4, args) + "\n");
+
+    size_t *ret = lib_fwrite(buffer, size, count, stream);
     return ret;
 }
 
@@ -109,10 +112,10 @@ int fprintf(FILE *stream, const char *format, ...)
     char tmp[1024] = {0,};
     vsnprintf(tmp, sizeof(tmp), format, ap);
     Variable args[2] = { 
-        { VT_offset, (PTR_TYPE)stream },
-        { VT_string, (PTR_TYPE)tmp }
+        Variable(VariableType::VT_offset, (PTR_TYPE)stream),
+        Variable(VariableType::VT_char_array, (PTR_TYPE)tmp),
     };
-    HOOK_LOG(LT_FILE, "fprintf", 2, args);
+    Logger::instance().log(MakeLogString("fprintf", 2, args) + "\n");
     va_end(ap);
 
     va_start(ap, format);
@@ -124,22 +127,24 @@ int fprintf(FILE *stream, const char *format, ...)
 size_t fread(void *buffer, size_t size, size_t count, FILE *stream)
 {
     Variable args[4] = { 
-        { VT_string, (PTR_TYPE)buffer },
-        { VT_unsigned_int, (PTR_TYPE)size },
-        { VT_unsigned_int, (PTR_TYPE)count },
-        { VT_offset, (PTR_TYPE)stream }
+        Variable(VariableType::VT_offset, (PTR_TYPE)buffer),
+        Variable(VariableType::VT_unsigned_int, (PTR_TYPE)size),
+        Variable(VariableType::VT_unsigned_int, (PTR_TYPE)count),
+        Variable(VariableType::VT_offset, (PTR_TYPE)stream)
     };
-    HOOK_LOG(LT_FILE, "fread", 4, args);
-    size_t ret = lib_fread(buffer, size, count, stream);
+    Logger::instance().log(MakeLogString("fread", 4, args) + "\n");
+
+    size_t *ret = lib_fread(buffer, size, count, stream);
     return ret;
 }
 
 int fclose(FILE *stream)
 {
     Variable args[1] = { 
-        { VT_offset, (PTR_TYPE)stream }
+        Variable(VariableType::VT_offset, (PTR_TYPE)stream)
     };
-    HOOK_LOG(LT_FILE, "fclose", 1, args);
+    Logger::instance().log(MakeLogString("fclose", 1, args) + "\n");
+
     int ret = lib_fclose(stream);
     return ret; 
 }
@@ -147,10 +152,11 @@ int fclose(FILE *stream)
 int access(const char *pathname, int mode)
 {
     Variable args[2] = { 
-        { VT_string, (PTR_TYPE)pathname },
-        { VT_unsigned_int, (PTR_TYPE)mode }
+        Variable(VariableType::VT_char_array, (PTR_TYPE)pathname),
+        Variable(VariableType::VT_int, (PTR_TYPE)mode)
     };
-    HOOK_LOG(LT_FILE, "access", 2, args);
+    Logger::instance().log(MakeLogString("access", 2, args) + "\n");
+
     int ret = lib_access(pathname, mode);
     return ret; 
 }
@@ -158,9 +164,10 @@ int access(const char *pathname, int mode)
 int unlink(const char *filename)
 {
     Variable args[1] = { 
-        { VT_string, (PTR_TYPE)filename }
+        Variable(VariableType::VT_char_array, (PTR_TYPE)filename)
     };
-    HOOK_LOG(LT_FILE, "unlink", 1, args);
+    Logger::instance().log(MakeLogString("unlink", 1, args) + "\n");
+
     int ret = lib_unlink(filename);
     return ret;
 }
@@ -168,9 +175,10 @@ int unlink(const char *filename)
 int remove(const char *filename)
 {
     Variable args[1] = { 
-        { VT_string, (PTR_TYPE)filename }
+        Variable(VariableType::VT_char_array, (PTR_TYPE)filename)
     };
-    HOOK_LOG(LT_FILE, "remove", 1, args);
+    Logger::instance().log(MakeLogString("remove", 1, args) + "\n");
+
     int ret = lib_remove(filename);
     return ret;
 }
@@ -178,10 +186,11 @@ int remove(const char *filename)
 int rename(const char *oldname, const char *newname)
 {
     Variable args[2] = { 
-        { VT_string, (PTR_TYPE)oldname },
-        { VT_string, (PTR_TYPE)newname }
+        Variable(VariableType::VT_char_array, (PTR_TYPE)oldname),
+        Variable(VariableType::VT_char_array, (PTR_TYPE)newname)
     };
-    HOOK_LOG(LT_FILE, "remove", 2, args);
+    Logger::instance().log(MakeLogString("rename", 2, args) + "\n");
+
     int ret = lib_rename(oldname, newname);
     return ret;
 }
@@ -189,11 +198,12 @@ int rename(const char *oldname, const char *newname)
 ssize_t readlink(const char *path, char *buf, size_t bufsize)
 {
     Variable args[3] = { 
-        { VT_string, (PTR_TYPE)path },
-        { VT_offset, (PTR_TYPE)buf },
-        { VT_unsigned_int, (PTR_TYPE)bufsize }
+        Variable(VariableType::VT_char_array, (PTR_TYPE)path),
+        Variable(VariableType::VT_offset, (PTR_TYPE)buf),
+        Variable(VariableType::VT_unsigned_int, (PTR_TYPE)bufsize)
     };
-    HOOK_LOG(LT_FILE, "readlink", 3, args);
+
+    Logger::instance().log(MakeLogString("readlink", 3, args) + "\n");
     ssize_t ret = lib_readlink(path, buf, bufsize);
     return ret;
 }
@@ -201,23 +211,24 @@ ssize_t readlink(const char *path, char *buf, size_t bufsize)
 mode_t umask(mode_t mode)
 {
     Variable args[1] = { 
-        { VT_unsigned_int, (PTR_TYPE)mode }
+        Variable(VariableType::VT_unsigned_int, (PTR_TYPE)mode)
     };
-    HOOK_LOG(LT_FILE, "umask", 1, args);
+    Logger::instance().log(MakeLogString("umask", 1, args) + "\n");
+
     mode_t ret = lib_umask(mode);
     return ret;
 }
 
 pid_t getpid()
 {
-    HOOK_LOG(LT_FILE, "getpid", 0, NULL);
+    Logger::instance().log(MakeLogString("getpid", 0, NULL) + "\n");
     pid_t ret = lib_getpid();
     return ret;
 }
 
 uid_t geteuid()
 {
-    HOOK_LOG(LT_FILE, "geteuid", 0, NULL);
+    Logger::instance().log(MakeLogString("geteuid", 0, NULL) + "\n");
     uid_t ret = lib_geteuid();
     return ret;
 }
@@ -225,19 +236,20 @@ uid_t geteuid()
 pid_t fork()
 {
     pid_t ret = lib_fork();
-    HOOK_LOG(LT_FILE, "fork", 0, NULL);
-    HOOK_LOG_RET(ret, VT_int);
+    Logger::instance().reopen_logfile(); // must be called after fork
+    Logger::instance().log(MakeLogString("fork", 0, NULL) + "\n");
     return ret;
 }
 
 pid_t waitpid(pid_t pid, int *stat_loc, int options)
 {
     Variable args[3] = { 
-        { VT_unsigned_int, (PTR_TYPE)pid },
-        { VT_offset, (PTR_TYPE)stat_loc },
-        { VT_int, (PTR_TYPE)options }
+        Variable(VariableType::VT_unsigned_int, (PTR_TYPE)pid),
+        Variable(VariableType::VT_int, (PTR_TYPE)stat_loc),
+        Variable(VariableType::VT_int, (PTR_TYPE)options)
     };
-    HOOK_LOG(LT_FILE, "waitpid", 3, args);
+    Logger::instance().log(MakeLogString("waitpid", 3, args) + "\n");
+
     pid_t ret = lib_waitpid(pid, stat_loc, options);
     return ret;
 }
@@ -245,9 +257,10 @@ pid_t waitpid(pid_t pid, int *stat_loc, int options)
 int system(const char *command)
 {
     Variable args[1] = { 
-        { VT_string, (PTR_TYPE)command }
+        Variable(VariableType::VT_char_array, (PTR_TYPE)command)
     };
-    HOOK_LOG(LT_FILE, "system", 1, args);
+    Logger::instance().log(MakeLogString("system", 1, args) + "\n");
+
     int ret = lib_system(command);
     return ret;
 }
@@ -255,11 +268,12 @@ int system(const char *command)
 int socket(int domain, int type, int protocol)
 {
     Variable args[3] = { 
-        { VT_int, (PTR_TYPE)domain },
-        { VT_int, (PTR_TYPE)type },
-        { VT_int, (PTR_TYPE)protocol }
+        Variable(VariableType::VT_int, (PTR_TYPE)domain),
+        Variable(VariableType::VT_int, (PTR_TYPE)type),
+        Variable(VariableType::VT_int, (PTR_TYPE)protocol)
     };
-    HOOK_LOG(LT_FILE, "socket", 3, args);
+    Logger::instance().log(MakeLogString("socket", 3, args) + "\n");
+
     int ret = lib_socket(domain, type, protocol);
     return ret;
 }
@@ -267,11 +281,12 @@ int socket(int domain, int type, int protocol)
 int connect(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
 {
     Variable args[3] = { 
-        { VT_int, (PTR_TYPE)sockfd },
-        { VT_offset, (PTR_TYPE)addr },
-        { VT_unsigned_int, (PTR_TYPE)addrlen }
+        Variable(VariableType::VT_int, (PTR_TYPE)sockfd),
+        Variable(VariableType::VT_offset, (PTR_TYPE)addr),
+        Variable(VariableType::VT_unsigned_int, (PTR_TYPE)addrlen)
     };
-    HOOK_LOG(LT_FILE, "connect", 3, args);
+    Logger::instance().log(MakeLogString("connect", 3, args) + "\n");
+
     int ret = lib_connect(sockfd, addr, addrlen);
     return ret;
 }
@@ -279,9 +294,10 @@ int connect(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
 uint16_t htons(uint16_t hostshort)
 {
     Variable args[1] = { 
-        { VT_unsigned_int, (PTR_TYPE)hostshort }
+        Variable(VariableType::VT_unsigned_short, (PTR_TYPE)hostshort)
     };
-    HOOK_LOG(LT_FILE, "htons", 1, args);
+    Logger::instance().log(MakeLogString("htons", 1, args) + "\n");
+
     uint16_t ret = lib_htons(hostshort);
     return ret;
 }
@@ -289,12 +305,13 @@ uint16_t htons(uint16_t hostshort)
 int getaddrinfo(const char *name, const char *service, const struct addrinfo *req, struct addrinfo **pai)
 {
     Variable args[4] = { 
-        { VT_string, (PTR_TYPE)name },
-        { VT_string, (PTR_TYPE)service },
-        { VT_offset, (PTR_TYPE)req },
-        { VT_offset, (PTR_TYPE)pai }
+        Variable(VariableType::VT_char_array, (PTR_TYPE)name),
+        Variable(VariableType::VT_char_array, (PTR_TYPE)service),
+        Variable(VariableType::VT_offset, (PTR_TYPE)req),
+        Variable(VariableType::VT_offset, (PTR_TYPE)pai)
     };
-    HOOK_LOG(LT_FILE, "getaddrinfo", 4, args);
+    Logger::instance().log(MakeLogString("getaddrinfo", 4, args) + "\n");
+
     int ret = lib_getaddrinfo(name, service, req, pai);
     return ret;
 }
@@ -302,12 +319,13 @@ int getaddrinfo(const char *name, const char *service, const struct addrinfo *re
 ssize_t send(int s, const void *msg, size_t len, int flags)
 {
     Variable args[4] = { 
-        { VT_int, (PTR_TYPE)s },
-        { VT_offset, (PTR_TYPE)msg },
-        { VT_unsigned_int, (PTR_TYPE)len },
-        { VT_int, (PTR_TYPE)flags }
+        Variable(VariableType::VT_int, (PTR_TYPE)s),
+        Variable(VariableType::VT_offset, (PTR_TYPE)msg),
+        Variable(VariableType::VT_unsigned_int, (PTR_TYPE)len),
+        Variable(VariableType::VT_int, (PTR_TYPE)flags)
     };
-    HOOK_LOG(LT_FILE, "send", 4, args);
+    Logger::instance().log(MakeLogString("send", 4, args) + "\n");
+
     ssize_t ret = lib_send(s, msg, len, flags);
     return ret;
 }
@@ -315,12 +333,13 @@ ssize_t send(int s, const void *msg, size_t len, int flags)
 ssize_t recv(int s, void *buf, size_t len, int flags)
 {
     Variable args[4] = { 
-        { VT_int, (PTR_TYPE)s },
-        { VT_offset, (PTR_TYPE)buf },
-        { VT_unsigned_int, (PTR_TYPE)len },
-        { VT_int, (PTR_TYPE)flags }
+        Variable(VariableType::VT_int, (PTR_TYPE)s),
+        Variable(VariableType::VT_offset, (PTR_TYPE)buf),
+        Variable(VariableType::VT_unsigned_int, (PTR_TYPE)len),
+        Variable(VariableType::VT_int, (PTR_TYPE)flags)
     };
-    HOOK_LOG(LT_FILE, "recv", 4, args);
+    Logger::instance().log(MakeLogString("recv", 4, args) + "\n");
+
     ssize_t ret = lib_recv(s, buf, len, flags);
     return ret;
 }
@@ -328,11 +347,12 @@ ssize_t recv(int s, void *buf, size_t len, int flags)
 int bind(int socket, const struct sockaddr *address, socklen_t address_len)
 {
     Variable args[3] = { 
-        { VT_int, (PTR_TYPE)socket },
-        { VT_offset, (PTR_TYPE)address },
-        { VT_unsigned_int, (PTR_TYPE)address_len }
+        Variable(VariableType::VT_int, (PTR_TYPE)socket),
+        Variable(VariableType::VT_offset, (PTR_TYPE)address),
+        Variable(VariableType::VT_unsigned_int, (PTR_TYPE)address_len)
     };
-    HOOK_LOG(LT_FILE, "bind", 3, args);
+    Logger::instance().log(MakeLogString("bind", 3, args) + "\n");
+
     int ret = lib_bind(socket, address, address_len);
     return ret;
 }
@@ -340,10 +360,11 @@ int bind(int socket, const struct sockaddr *address, socklen_t address_len)
 int listen(int socket, int backlog)
 {
     Variable args[2] = { 
-        { VT_int, (PTR_TYPE)socket },
-        { VT_int, (PTR_TYPE)backlog }
+        Variable(VariableType::VT_int, (PTR_TYPE)socket),
+        Variable(VariableType::VT_int, (PTR_TYPE)backlog)
     };
-    HOOK_LOG(LT_FILE, "listen", 2, args);
+    Logger::instance().log(MakeLogString("listen", 2, args) + "\n");
+
     int ret = lib_listen(socket, backlog);
     return ret;
 }
@@ -351,12 +372,13 @@ int listen(int socket, int backlog)
 int pthread_create(pthread_t *thread, const pthread_attr_t *attr, void *(*start_routine)(void *), void *restrictarg)
 {
     Variable args[4] = { 
-        { VT_offset, (PTR_TYPE)thread },
-        { VT_offset, (PTR_TYPE)attr },
-        { VT_offset, (PTR_TYPE)start_routine },
-        { VT_offset, (PTR_TYPE)restrictarg }
+        Variable(VariableType::VT_offset, (PTR_TYPE)thread),
+        Variable(VariableType::VT_offset, (PTR_TYPE)attr),
+        Variable(VariableType::VT_offset, (PTR_TYPE)start_routine),
+        Variable(VariableType::VT_offset, (PTR_TYPE)restrictarg)
     };
-    HOOK_LOG(LT_FILE, "pthread_create", 4, args);
+    Logger::instance().log(MakeLogString("pthread_create", 4, args) + "\n");
+
     int ret = lib_pthread_create(thread, attr, start_routine, restrictarg);
     return ret;
 }
@@ -364,10 +386,11 @@ int pthread_create(pthread_t *thread, const pthread_attr_t *attr, void *(*start_
 sighandler_t signal(int signum, sighandler_t handler)
 {
     Variable args[2] = { 
-        { VT_unsigned_int, (PTR_TYPE)signum },
-        { VT_offset, (PTR_TYPE)handler }
+        Variable(VariableType::VT_int, (PTR_TYPE)signum),
+        Variable(VariableType::VT_offset, (PTR_TYPE)handler)
     };
-    HOOK_LOG(LT_FILE, "signal", 2, args);
+    Logger::instance().log(MakeLogString("signal", 2, args) + "\n");
+
     sighandler_t ret = lib_signal(signum, handler);
     return ret;
 }
@@ -375,17 +398,20 @@ sighandler_t signal(int signum, sighandler_t handler)
 void exit(int status)
 {
     Variable args[1] = { 
-        { VT_int, (PTR_TYPE)status }
+        Variable(VariableType::VT_int, (PTR_TYPE)status)
     };
-    HOOK_LOG(LT_FILE, "exit", 1, args);
+    Logger::instance().log(MakeLogString("exit", 1, args) + "\n");
+
     lib_exit(status);
 }
 
 unsigned int sleep(unsigned int seconds)
 {
     Variable args[1] = { 
-        { VT_unsigned_int, (PTR_TYPE)seconds }
+        Variable(VariableType::VT_unsigned_int, (PTR_TYPE)seconds)
     };
-    HOOK_LOG(LT_FILE, "sleep", 1, args);
-    lib_sleep(seconds);
+    Logger::instance().log(MakeLogString("sleep", 1, args) + "\n");
+    
+    unsigned int ret = lib_sleep(seconds);
+    return ret;
 }

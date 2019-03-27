@@ -11,7 +11,6 @@ namespace Mini
 
 std::string MakeLogString(char *, int, Variable *);
 
-
 }
 
 #endif // __UTIL_H__

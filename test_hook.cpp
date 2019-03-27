@@ -20,7 +20,7 @@ FILE *fopen(const char *filename, const char *mode)
         Variable(VariableType::VT_char_array, (PTR_TYPE)filename),
         Variable(VariableType::VT_char_array, (PTR_TYPE)mode)
     };
-    Logger::instance().log(MakeLogString("fopen", 2, args));
+    Logger::instance().log(MakeLogString("fopen", 2, args) + "\n");
 
     FILE *ret = lib_fopen(filename, mode);
     return ret;
