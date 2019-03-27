@@ -3,15 +3,6 @@
 namespace Mini
 {
 
-enum class VariableType
-{
-    VT_bool,
-    VT_char,
-    VT_short,
-    VT_int,
-    VT_char_array
-};
-
 Variable::Variable(const VariableType var_type, const PTR_TYPE& data) : _var_type(var_type), _data(data)
 {
 

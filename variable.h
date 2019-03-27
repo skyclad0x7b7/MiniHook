@@ -14,7 +14,14 @@ typedef uint32_t PTR_TYPE;
 namespace Mini
 {
 
-enum class VariableType;
+enum class VariableType
+{
+    VT_bool,
+    VT_char,
+    VT_short,
+    VT_int,
+    VT_char_array
+};
 
 class Variable
 {
