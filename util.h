@@ -9,7 +9,7 @@
 namespace Mini
 {
 
-std::string MakeLogString(char *, int, Variable *);
+std::string MakeLogString(const char *, int, Variable *);
 
 }
 

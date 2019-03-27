@@ -1,5 +1,7 @@
 #include "hook.h"
 
+using namespace Mini;
+
 lib_fopen_type lib_fopen = NULL;
 lib_freopen_type lib_freopen = NULL;
 lib_fwrite_type lib_fwrite = NULL;
@@ -101,7 +103,7 @@ size_t fwrite(const void *buffer, size_t size, size_t count, FILE *stream)
     };
     Logger::instance().log(MakeLogString("fwrite", 4, args) + "\n");
 
-    size_t *ret = lib_fwrite(buffer, size, count, stream);
+    size_t ret = lib_fwrite(buffer, size, count, stream);
     return ret;
 }
 
@@ -134,7 +136,7 @@ size_t fread(void *buffer, size_t size, size_t count, FILE *stream)
     };
     Logger::instance().log(MakeLogString("fread", 4, args) + "\n");
 
-    size_t *ret = lib_fread(buffer, size, count, stream);
+    size_t ret = lib_fread(buffer, size, count, stream);
     return ret;
 }
 
