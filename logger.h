@@ -19,9 +19,6 @@ public:
     {
         static Logger* ins = new Logger();
         return *ins;
-        //if(_instance == NULL)
-        //    _instance = new Logger();
-        //return *_instance;
     }
 
     void reopen_logfile();
@@ -33,7 +30,6 @@ private:
     pid_t _pid;
     char _filename[256];
     std::ofstream _ofs;
-    //static Logger *_instance;
 };
 
 } // namespace Mini

@@ -8,6 +8,11 @@ Variable::Variable(const VariableType var_type, const PTR_TYPE& data) : _var_typ
 
 }
 
+Variable::~Variable()
+{
+    
+}
+
 PTR_TYPE Variable::GetData() const
 {
     return _data;
