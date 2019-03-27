@@ -1,7 +1,13 @@
 #ifndef __LOGGER_H__
 #define __LOGGER_H__
 
+#include <stdio.h>
+#include <fstream>
+#include <string>
+#include <string.h>
 #include "libc_func.h"
+
+const char *const LOG_PATH = "./logs";
 
 namespace Mini
 {
@@ -9,32 +15,21 @@ namespace Mini
 class Logger
 {
 public:
-    static Logger& instance(bool forceInit = false)
-	{
-        if(forceInit)
-            Destroy();
-
-        if(_instance == nullptr)
-        {
-            _instance = new Logger();
-        }
-        return *_instance;
-    }
-
-    static void Destroy()
+    static Logger& instance()
     {
-        if(_instance != nullptr)
-        {
-            delete _instance;
-            _instance = nullptr;
-        }
+        static Logger* ins = new Logger();
+        return *ins;
     }
 
+    void reopen_logfile();
+    void log(const std::string&);
 private:
     Logger();
     ~Logger();
 
-    static Logger *_instance;
+    pid_t _pid;
+    char _filename[256];
+    std::ofstream _ofs;
 };
 
 } // namespace Mini
