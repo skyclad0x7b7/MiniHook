@@ -8,6 +8,7 @@
 
 #include "libc_func.h"
 #include "variable.h"
+#include "util.h"
 
 const char *const LOG_PATH = "./logs";
 
