@@ -102,8 +102,8 @@ typedef void (*sighandler_t)(int);
 typedef sighandler_t(*lib_signal_type)(int, sighandler_t);
 extern lib_signal_type lib_signal;
 
-typedef void (*lib_exit_type)(int);
-extern lib_exit_type lib_exit;
+typedef void (*lib_exit_type)(int) __attribute__((__noreturn__));
+extern __attribute__((__noreturn__)) lib_exit_type lib_exit;
 
 typedef unsigned int(*lib_sleep_type)(unsigned int);
 extern lib_sleep_type lib_sleep;
