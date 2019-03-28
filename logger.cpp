@@ -40,7 +40,7 @@ void Logger::log(const std::string& log_string)
 std::string MakeLogString(const std::string& func_name, int argc, Variable *argv)
 {
     char buf[1024] = { 0, };
-    snprintf(buf, sizeof(buf), "[%010lu] %s(", GetPassedTimeNS().count(), func_name.c_str());
+    snprintf(buf, sizeof(buf), "[%016lu] %s(", static_cast<long unsigned int>(GetCurrentTimeMS().count(), func_name.c_str());
     std::string ret(buf);
     for(int i = 0; i < argc; i++)
     {
