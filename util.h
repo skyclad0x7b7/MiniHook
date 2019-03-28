@@ -8,8 +8,10 @@
 
 namespace Mini
 {
-
-extern std::chrono::time_point<std::chrono::high_resolution_clock> startedTimeNS;
+    
+extern "C" {
+    extern std::chrono::time_point<std::chrono::high_resolution_clock> startedTimeNS;
+}
 
 std::chrono::nanoseconds GetPassedTimeNS();
 

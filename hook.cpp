@@ -2,40 +2,72 @@
 
 using namespace Mini;
 
+std::chrono::time_point<std::chrono::high_resolution_clock> startedTimeNS = NULL;
+
+lib_fopen_type lib_fopen = NULL;
+lib_freopen_type lib_freopen = NULL;
+lib_fwrite_type lib_fwrite = NULL;
+lib_fread_type lib_fread = NULL;
+lib_fclose_type lib_fclose = NULL;
+lib_access_type lib_access = NULL;
+lib_unlink_type lib_unlink = NULL;
+lib_remove_type lib_remove = NULL;
+lib_rename_type lib_rename = NULL;
+lib_readlink_type lib_readlink = NULL;
+lib_umask_type lib_umask = NULL;
+lib_getpid_type lib_getpid = NULL;
+lib_geteuid_type lib_geteuid = NULL;
+lib_fork_type lib_fork = NULL;
+lib_waitpid_type lib_waitpid = NULL;
+lib_system_type lib_system = NULL;
+lib_socket_type lib_socket = NULL;
+lib_htons_type lib_htons = NULL;
+lib_getaddrinfo_type lib_getaddrinfo = NULL;
+lib_connect_type lib_connect = NULL;
+lib_send_type lib_send = NULL;
+lib_recv_type lib_recv = NULL;
+lib_bind_type lib_bind = NULL;
+lib_listen_type lib_listen = NULL;
+lib_pthread_create_type lib_pthread_create = NULL;
+lib_kill_type lib_kill = NULL;
+lib_signal_type lib_signal = NULL;
+lib_exit_type lib_exit = NULL;
+lib_sleep_type lib_sleep = NULL;
+
 static void con() __attribute__((constructor));
 void con()
 {
-    std::chrono::time_point<std::chrono::high_resolution_clock> startedTimeNS = std::chrono::high_resolution_clock::now();
+    startedTimeNS = std::chrono::high_resolution_clock::now();
 
-    lib_fopen_type lib_fopen = (lib_fopen_type)dlsym(RTLD_NEXT, "fopen");
-    lib_freopen_type lib_freopen = (lib_freopen_type)dlsym(RTLD_NEXT, "freopen");
-    lib_fwrite_type lib_fwrite = (lib_fwrite_type)dlsym(RTLD_NEXT, "fwrite");
-    lib_fread_type lib_fread = (lib_fread_type)dlsym(RTLD_NEXT, "fread");
-    lib_fclose_type lib_fclose = (lib_fclose_type)dlsym(RTLD_NEXT, "fclose");
-    lib_access_type lib_access = (lib_access_type)dlsym(RTLD_NEXT, "access");
-    lib_unlink_type lib_unlink = (lib_unlink_type)dlsym(RTLD_NEXT, "unlink");
-    lib_remove_type lib_remove = (lib_remove_type)dlsym(RTLD_NEXT, "remove");
-    lib_rename_type lib_rename = (lib_rename_type)dlsym(RTLD_NEXT, "rename");
-    lib_readlink_type lib_readlink = (lib_readlink_type)dlsym(RTLD_NEXT, "readlink");
-    lib_umask_type lib_umask = (lib_umask_type)dlsym(RTLD_NEXT, "umask");
-    lib_getpid_type lib_getpid = (lib_getpid_type)dlsym(RTLD_NEXT, "getpid");
-    lib_geteuid_type lib_geteuid = (lib_geteuid_type)dlsym(RTLD_NEXT, "geteuid");
-    lib_fork_type lib_fork = (lib_fork_type)dlsym(RTLD_NEXT, "fork");
-    lib_waitpid_type lib_waitpid = (lib_waitpid_type)dlsym(RTLD_NEXT, "waitpid");
-    lib_system_type lib_system = (lib_system_type)dlsym(RTLD_NEXT, "system");
-    lib_socket_type lib_socket = (lib_socket_type)dlsym(RTLD_NEXT, "socket");
-    lib_connect_type lib_connect = (lib_connect_type)dlsym(RTLD_NEXT, "connect");
-    lib_htons_type lib_htons = (lib_htons_type)dlsym(RTLD_NEXT, "htons");
-    lib_getaddrinfo_type lib_getaddrinfo = (lib_getaddrinfo_type)dlsym(RTLD_NEXT, "getaddrinfo");
-    lib_send_type lib_send = (lib_send_type)dlsym(RTLD_NEXT, "send");
-    lib_recv_type lib_recv = (lib_recv_type)dlsym(RTLD_NEXT, "recv");
-    lib_bind_type lib_bind = (lib_bind_type)dlsym(RTLD_NEXT, "bind");
-    lib_listen_type lib_listen = (lib_listen_type)dlsym(RTLD_NEXT, "listen");
-    lib_pthread_create_type lib_pthread_create = (lib_pthread_create_type)dlsym(RTLD_NEXT, "pthread_create");
-    lib_kill_type lib_kill = (lib_kill_type)dlsym(RTLD_NEXT, "kill");
-    lib_signal_type lib_signal = (lib_signal_type)dlsym(RTLD_NEXT, "signal");
-    lib_exit_type lib_exit = (lib_exit_type)dlsym(RTLD_NEXT, "exit");
-    lib_sleep_type lib_sleep = (lib_sleep_type)dlsym(RTLD_NEXT, "sleep");
+    lib_fopen = (lib_fopen_type)dlsym(RTLD_NEXT, "fopen");
+    lib_freopen = (lib_freopen_type)dlsym(RTLD_NEXT, "freopen");
+    lib_fwrite = (lib_fwrite_type)dlsym(RTLD_NEXT, "fwrite");
+    lib_fread = (lib_fread_type)dlsym(RTLD_NEXT, "fread");
+    lib_fclose = (lib_fclose_type)dlsym(RTLD_NEXT, "fclose");
+    lib_access = (lib_access_type)dlsym(RTLD_NEXT, "access");
+    lib_unlink = (lib_unlink_type)dlsym(RTLD_NEXT, "unlink");
+    lib_remove = (lib_remove_type)dlsym(RTLD_NEXT, "remove");
+    lib_rename = (lib_rename_type)dlsym(RTLD_NEXT, "rename");
+    lib_readlink = (lib_readlink_type)dlsym(RTLD_NEXT, "readlink");
+    lib_umask = (lib_umask_type)dlsym(RTLD_NEXT, "umask");
+    lib_getpid = (lib_getpid_type)dlsym(RTLD_NEXT, "getpid");
+    lib_geteuid = (lib_geteuid_type)dlsym(RTLD_NEXT, "geteuid");
+    lib_fork = (lib_fork_type)dlsym(RTLD_NEXT, "fork");
+    lib_waitpid = (lib_waitpid_type)dlsym(RTLD_NEXT, "waitpid");
+    lib_system = (lib_system_type)dlsym(RTLD_NEXT, "system");
+    lib_socket = (lib_socket_type)dlsym(RTLD_NEXT, "socket");
+    lib_connect = (lib_connect_type)dlsym(RTLD_NEXT, "connect");
+    lib_htons = (lib_htons_type)dlsym(RTLD_NEXT, "htons");
+    lib_getaddrinfo = (lib_getaddrinfo_type)dlsym(RTLD_NEXT, "getaddrinfo");
+    lib_send = (lib_send_type)dlsym(RTLD_NEXT, "send");
+    lib_recv = (lib_recv_type)dlsym(RTLD_NEXT, "recv");
+    lib_bind = (lib_bind_type)dlsym(RTLD_NEXT, "bind");
+    lib_listen = (lib_listen_type)dlsym(RTLD_NEXT, "listen");
+    lib_pthread_create = (lib_pthread_create_type)dlsym(RTLD_NEXT, "pthread_create");
+    lib_kill = (lib_kill_type)dlsym(RTLD_NEXT, "kill");
+    lib_signal = (lib_signal_type)dlsym(RTLD_NEXT, "signal");
+    lib_exit = (lib_exit_type)dlsym(RTLD_NEXT, "exit");
+    lib_sleep = (lib_sleep_type)dlsym(RTLD_NEXT, "sleep");
 }
 
  /* ========================================================== */
