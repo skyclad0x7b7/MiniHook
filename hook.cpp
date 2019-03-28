@@ -239,7 +239,7 @@ pid_t fork()
 {
     pid_t ret = lib_fork();
     Logger::instance().reopen_logfile(); // must be called after fork
-    Logger::instance().log(MakeLogString("fork", 0, NULL) + "\n");
+    Logger::instance().log(MakeLogString("fork", 0, NULL) + " => " + Variable(VariableType::VT_unsigned_int, ret).ToString() + "\n");
     return ret;
 }
 
