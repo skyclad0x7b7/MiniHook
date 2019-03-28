@@ -2,7 +2,7 @@
 
 using namespace Mini;
 
-std::chrono::time_point<std::chrono::high_resolution_clock> startedTimeNS = NULL;
+std::chrono::time_point<std::chrono::high_resolution_clock> startedTimeNS = std::chrono::high_resolution_clock::now();
 
 lib_fopen_type lib_fopen = NULL;
 lib_freopen_type lib_freopen = NULL;
@@ -37,7 +37,8 @@ lib_sleep_type lib_sleep = NULL;
 static void con() __attribute__((constructor));
 void con()
 {
-    startedTimeNS = std::chrono::high_resolution_clock::now();
+    // Don't know why re-declare is needed. Missing re-declare makes ambiguous reference error.
+    std::chrono::time_point<std::chrono::high_resolution_clock> startedTimeNS = std::chrono::high_resolution_clock::now();
 
     lib_fopen = (lib_fopen_type)dlsym(RTLD_NEXT, "fopen");
     lib_freopen = (lib_freopen_type)dlsym(RTLD_NEXT, "freopen");

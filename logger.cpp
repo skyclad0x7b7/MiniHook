@@ -39,8 +39,9 @@ void Logger::log(const std::string& log_string)
 
 std::string MakeLogString(const std::string& func_name, int argc, Variable *argv)
 {
-    std::string ret = std::to_string(GetPassedTimeNS().count());
-    ret += (func_name + "(");
+    char buf[1024] = { 0, };
+    snprintf(buf, sizeof(buf), "[%010lu] %s(", GetPassedTimeNS().count(), func_name.c_str());
+    std::string ret(buf);
     for(int i = 0; i < argc; i++)
     {
         ret += argv[i].ToString();
