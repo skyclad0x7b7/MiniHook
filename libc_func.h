@@ -14,12 +14,6 @@
 #include <unistd.h>
 #include <netdb.h>
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif // __cplusplus
-
-/***** Initialize org libc functions *****/
 typedef FILE *(*lib_fopen_type)(const char *, const char *);
 extern lib_fopen_type lib_fopen;
 
@@ -107,9 +101,5 @@ extern __attribute__((__noreturn__)) lib_exit_type lib_exit;
 
 typedef unsigned int(*lib_sleep_type)(unsigned int);
 extern lib_sleep_type lib_sleep;
-
-#ifdef __cplusplus
-} // extern "C"
-#endif // __cplusplus
 
 #endif // __LIBC_FUNC_H__
