@@ -4,12 +4,8 @@
 #include <stdio.h>
 #include <string>
 
-#include "variable.h"
-
 namespace Mini
 {
-
-std::string MakeLogString(const char *, int, Variable *);
 
 }
 

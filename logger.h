@@ -5,7 +5,9 @@
 #include <fstream>
 #include <string>
 #include <string.h>
+
 #include "libc_func.h"
+#include "variable.h"
 
 const char *const LOG_PATH = "./logs";
 
@@ -31,6 +33,8 @@ private:
     char _filename[256];
     std::ofstream _ofs;
 };
+
+std::string MakeLogString(const char *, int, Variable *);
 
 } // namespace Mini
 

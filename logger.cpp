@@ -37,4 +37,18 @@ void Logger::log(const std::string& log_string)
         fprintf(stderr, "[-] %d | Logger::log error : _ofs.good failed with file '%s'", _pid, _filename);
 }
 
+std::string MakeLogString(const char *func_name, int argc, Variable *argv)
+{
+    std::string ret = func_name;
+    ret += "(";
+    for(int i = 0; i < argc; i++)
+    {
+        ret += argv[i].ToString();
+        if(i+1 != argc)
+            ret += ", ";
+    }
+    ret += ")";
+    return ret;
+}
+
 } // namespace Mini
