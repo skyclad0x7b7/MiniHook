@@ -35,7 +35,7 @@ private:
     std::ofstream _ofs;
 };
 
-std::string MakeLogString(const char *, int, Variable *);
+std::string MakeLogString(const std::string&, int, Variable *);
 
 } // namespace Mini
 

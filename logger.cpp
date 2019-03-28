@@ -37,7 +37,7 @@ void Logger::log(const std::string& log_string)
         fprintf(stderr, "[-] %d | Logger::log error : _ofs.good failed with file '%s'", _pid, _filename);
 }
 
-std::string MakeLogString(const char *func_name, int argc, Variable *argv)
+std::string MakeLogString(const std::string& func_name, int argc, Variable *argv)
 {
     std::string ret = std::to_string(GetPassedTimeNS().count());
     ret += (func_name + "(");
