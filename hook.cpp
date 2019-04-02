@@ -4,8 +4,8 @@ using namespace Mini;
 
 std::chrono::time_point<std::chrono::high_resolution_clock> startedTimeNS = std::chrono::high_resolution_clock::now();
 
-lib_write_type lib_write = NULL;
-lib_read_type lib_read = NULL;
+// lib_write_type lib_write = NULL;
+// lib_read_type lib_read = NULL;
 lib_fopen_type lib_fopen = NULL;
 lib_freopen_type lib_freopen = NULL;
 lib_fwrite_type lib_fwrite = NULL;
@@ -42,8 +42,8 @@ void con()
     // Don't know why re-declare is needed. Missing re-declare makes ambiguous reference error.
     std::chrono::time_point<std::chrono::high_resolution_clock> startedTimeNS = std::chrono::high_resolution_clock::now();
 
-    lib_write = (lib_write_type)dlsym(RTLD_NEXT, "write");
-    lib_read = (lib_read_type)dlsym(RTLD_NEXT, "read");
+    // lib_write = (lib_write_type)dlsym(RTLD_NEXT, "write");
+    // lib_read = (lib_read_type)dlsym(RTLD_NEXT, "read");
     lib_fopen = (lib_fopen_type)dlsym(RTLD_NEXT, "fopen");
     lib_freopen = (lib_freopen_type)dlsym(RTLD_NEXT, "freopen");
     lib_fwrite = (lib_fwrite_type)dlsym(RTLD_NEXT, "fwrite");
@@ -77,31 +77,31 @@ void con()
 
  /* ========================================================== */
 
-ssize_t write(int fildes, const void *buf, size_t nbyte)
-{
-    Variable args[3] = {
-        Variable(VariableType::VT_int, (PTR_TYPE)fildes),
-        Variable(VariableType::VT_offset, (PTR_TYPE)buf),
-        Variable(VariableType::VT_unsigned_int, (PTR_TYPE)nbyte)
-    };
-    Logger::instance().log(MakeLogString("write", 3, args) + "\n");
+// ssize_t write(int fildes, const void *buf, size_t nbyte)
+// {
+//     Variable args[3] = {
+//         Variable(VariableType::VT_int, (PTR_TYPE)fildes),
+//         Variable(VariableType::VT_offset, (PTR_TYPE)buf),
+//         Variable(VariableType::VT_unsigned_int, (PTR_TYPE)nbyte)
+//     };
+//     Logger::instance().log(MakeLogString("write", 3, args) + "\n");
 
-    ssize_t ret = lib_write(fildes, buf, nbyte);
-    return ret;
-}
+//     ssize_t ret = lib_write(fildes, buf, nbyte);
+//     return ret;
+// }
 
-ssize_t read(int fildes, void *buf, size_t nbyte)
-{
-    Variable args[3] = {
-        Variable(VariableType::VT_int, (PTR_TYPE)fildes),
-        Variable(VariableType::VT_offset, (PTR_TYPE)buf),
-        Variable(VariableType::VT_unsigned_int, (PTR_TYPE)nbyte)
-    };
-    Logger::instance().log(MakeLogString("read", 3, args) + "\n");
+// ssize_t read(int fildes, void *buf, size_t nbyte)
+// {
+//     Variable args[3] = {
+//         Variable(VariableType::VT_int, (PTR_TYPE)fildes),
+//         Variable(VariableType::VT_offset, (PTR_TYPE)buf),
+//         Variable(VariableType::VT_unsigned_int, (PTR_TYPE)nbyte)
+//     };
+//     Logger::instance().log(MakeLogString("read", 3, args) + "\n");
 
-    ssize_t ret = lib_read(fildes, buf, nbyte);
-    return ret;
-}
+//     ssize_t ret = lib_read(fildes, buf, nbyte);
+//     return ret;
+// }
 
 FILE *fopen(const char *filename, const char *mode)
 {

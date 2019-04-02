@@ -14,11 +14,11 @@
 #include <unistd.h>
 #include <netdb.h>
 
-typedef ssize_t(*lib_write_type)(int, const void *, size_t);
-extern lib_write_type lib_write;
+// typedef ssize_t(*lib_write_type)(int, const void *, size_t);
+// extern lib_write_type lib_write;
 
-typedef ssize_t(*lib_read_type)(int , void *, size_t);
-extern lib_read_type lib_read;
+// typedef ssize_t(*lib_read_type)(int , void *, size_t);
+// extern lib_read_type lib_read;
 
 typedef FILE *(*lib_fopen_type)(const char *, const char *);
 extern lib_fopen_type lib_fopen;
